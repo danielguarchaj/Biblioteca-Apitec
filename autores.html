@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+    <meta charset="utf-8">
+    <title>Biblioteca</title>
+    <link rel="stylesheet" href="css/index.css">
+    <script src="jquery.min.js"></script>
+</head>
+
+<body>
+    <script type="text/javascript">
+        if (localStorage.getItem('sesion') == null || localStorage.getItem('sesion') == 0) window.location.href = 'login.html';
+        localStorage.setItem('editar_libro', null);
+        localStorage.setItem('editar_autor', null);
+    </script>
+
+
+    <div class="div_contenedor_principal">
+
+        <div class="div_encabezado">
+            <h3>Autores</h3>
+        </div>
+        <div class="div_navegacion">
+            <div class="div_titulo_pagina">
+                <h3>Biblioteca</h3>
+            </div>
+            <div class="div_botones_navegacion">
+                <input type="button" class="button btn_libros" value="Libros">
+                <input type="button" class="button btn_pagina_actual" value="Autores">
+                <input type="button" class="button btn_temas" value="Temas">
+                <input type="button" class="btn_salir button" value="Salir">
+            </div>
+        </div>
+        <div class="div_ver_libros">
+            <div class="div_titulo_pantalla">
+                <h3>Listado general de autores</h3>
+                <input type="button" class="button" value="Agregar" id="btn_agregar_nuevo_autor">
+                <div class="div_cantidad_elementos">
+                    <label class="lbl_cantidad_elementos">Cantidad de elementos a mostrar</label>
+                    <input type="button" class="button" value="10" id="btn_ver_10_autores">
+                    <input type="button" class="button" value="20" id="btn_ver_20_autores">
+                    <input type="button" class="button" value="50" id="btn_ver_50_autores">
+                </div>
+            </div>
+            <div class="div_tabla">
+                <table id="table_autores" class="tabla">
+                </table>
+            </div>
+            <div class="div_botones_inferiores">
+                <input type="button" class="button" value="Anterior" id="btn_anterior_autores">
+                <label id="lbl_rango_autores"></label>
+                <input type="button" class="button" value="Siguiente" id="btn_siguiente_autores">
+            </div>
+        </div>
+    </div>
+    <script src="script_autores.js"></script>
+    <script src="paises.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>Biblioteca</title>
+    <link rel="stylesheet" href="css/index.css">
+    <script src="jquery.min.js"></script>
+</head>
+
+<body>
+    <script type="text/javascript">
+        if (localStorage.getItem('sesion') == 'null' || localStorage.getItem('sesion') == 0) window.location.href = 'login.html';
+        localStorage.setItem('editar_autor', null);
+        localStorage.setItem('editar_tema', null);
+    </script>
+    <div class="div_contenedor_principal">
+        <div class="div_encabezado">
+            <h3>Prestamos</h3>
+        </div>
+        <div class="div_navegacion">
+            <div class="div_titulo_pagina">
+                <h3>Biblioteca</h3>
+            </div>
+            <div class="div_botones_navegacion">
+                <input type="button" class="button btn_libros" value="Libros">
+                <input type="button" class="button btn_autores" value="Autores">
+                <input type="button" class="button btn_temas" value="Temas">
+                <input type="button" class="button btn_prestamos btn_pagina_actual" value="Prestamos">
+                <input type="button" class="button btn_usuarios" value="Usuarios">
+                <input type="button" class="btn_salir button" value="Salir">
+            </div>
+        </div>
+        <div class="div_ver_libros">
+            <div class="div_titulo_pantalla">
+                <h3>Prestamos</h3>
+            </div>
+            <div class="div_elementos_busqueda">
+                <label>Buscar por: </label>
+                <select id="slc_buscar_libro_por">
+                    <option value="1">Nombre</option>
+                    <option value="2">Autor</option>
+                    <option value="3">Tema</option>
+                    <option value="4">Ubicacion</option>
+                </select>
+                <input type="text" id="txt_buscar_libro">
+                <input type="button" class="button" value="Buscar" id="btn_buscar_libro">
+            </div>
+            <div class="div_tabla">
+                <table id="table_libros_prestados" class="tabla">
+                </table>
+            </div>
+            <div class="div_botones_inferiores botones_agregar_libro">
+                <input type="button" class="button  btn_regresar_libros" value="Regresar">
+                <input type="button" class="button" value="Devolver" id="btn_aceptar_devolucion_libro">
+            </div>
+
+        </div>
+    </div>
+    <script type="text/javascript" src="script_validaciones.js"></script>
+    <script src="script_libros.js"></script>
+    <script src="actualizar_estado_prestamos.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,224 @@
+@import url('https://fonts.googleapis.com/css?family=Nunito');
+@import url('https://fonts.googleapis.com/css?family=Muli');
+@import url('https://fonts.googleapis.com/css?family=Dosis');
+@import url('https://fonts.googleapis.com/css?family=Oxygen');
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Oxygen', sans-serif;
+    font-weight: 400;
+}
+
+.div_contenedor_principal {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+}
+
+.div_encabezado {
+    height: 45px;
+    background-color: rgb(64, 88, 134);
+    color: white;
+    padding-top: 12px;
+    padding-bottom: 10px;
+    position: fixed;
+    z-index: 999;
+    width: 100%;
+}
+
+.div_encabezado h3 {
+    position: relative;
+    bottom: 10px;
+    width: 300px;
+    height: 10px;
+    margin-left: 10px;
+}
+
+.div_titulo_pagina {
+    text-align: left;
+    width: 30%;
+    margin-left: 10px;
+}
+
+.div_titulo_pagina h1 {
+    position: relative;
+}
+
+.button {
+    border-radius: 2px;
+    border: none;
+    height: 30px;
+    width: 100px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.button:hover {
+    background-color: #69a1f5;
+    color: white;
+}
+
+.div_navegacion {
+    position: relative;
+    display: flex;
+    flex-flow: row;
+    width: 100%;
+    margin-top: 70px;
+}
+
+.div_botones_navegacion {
+    width: 70%;
+    text-align: right;
+    margin-right: 10px;
+    margin-top: 20px;
+}
+
+.div_titulo_pantalla {
+    margin-left: 10px;
+}
+
+.div_tabla {
+    position: relative;
+    width: 100%;
+    padding-top: 10px;
+}
+
+.tabla {
+    position: relative;
+    font-size: 12px;
+    border-collapse: collapse;
+    width: 98%;
+    text-align: center;
+    left: 10px;
+}
+
+.mostrar_info{
+    width: 400px;
+    left: 30%;
+    margin-left: -25%;
+}
+
+.mostrar_info th {
+    width: 200px;
+}
+
+.tabla th {
+    font-size: 16px;
+    font-weight: 500;
+}
+
+.tabla td, .tabla th {
+    border: 1px solid #ddd;
+    padding: 8px;
+}
+
+.tabla tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+.tabla tr:hover {
+    background-color: #ddd;
+}
+
+.tabla th {
+    padding-top: 12px;
+    padding-bottom: 12px;
+    background-color: rgb(64, 88, 134);
+    color: white;
+}
+
+.div_botones_inferiores {
+    width: 100%;
+    margin-top: 10px;
+    text-align: center;
+}
+
+.div_formulario_agregar {
+    display: flex;
+    position: relative;
+    flex-flow: row;
+    left: 50%;
+    margin-left: -25%;
+}
+
+.div_labels {
+    display: flex;
+    flex-flow: column;
+    margin-right: 30px;
+}
+
+.div_inputs {
+    display: flex;
+    flex-flow: column;
+}
+
+.div_inputs input {
+    height: 20px;
+    margin-bottom: 15px;
+    width: 300px;
+}
+
+.div_inputs select{
+    height: 25px;
+    margin-bottom: 15px;
+}
+
+.div_labels label {
+    height: 25px;
+    text-align: left;
+    margin-bottom: 15px;
+}
+
+.div_cantidad_elementos {
+    display: flex;
+    float: right;
+    margin-right: 10px;
+    margin-bottom: 10px;
+}
+
+.div_cantidad_elementos label{
+    font-size: 16px;
+}
+
+.div_cantidad_elementos input {
+    width: 30px;
+    height: 30px;
+}
+
+.div_elementos_busqueda {
+    margin-left: 10px;
+}
+
+.div_elementos_busqueda .button {
+    width: 200px;
+    height: 30px;
+}
+
+.tabla_button {
+    border: none;
+    cursor: pointer;
+    background-color: rgb(64, 88, 134);
+    color: white;
+    width: 60px;
+    height: 20px;
+    font-size: 12px;
+    font-weight: normal;
+}
+
+.btn_pagina_actual {
+    background-color: #69a1f5;
+    color: white;
+}
+
+.div_genero_autor input{
+    width: 30px;
+}
+
+.div_genero_autor label {
+    font-size: 16px;
+}
+
+
+
+/**/

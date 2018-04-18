@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+    <meta charset="utf-8">
+    <title>Biblioteca</title>
+    <link rel="stylesheet" href="css/index.css">
+    <script src="jquery.min.js"></script>
+</head>
+
+<body>
+    <script type="text/javascript">
+        if (localStorage.getItem('sesion') == null || localStorage.getItem('sesion') == 0) window.location.href = 'login.html';
+        localStorage.setItem('editar_libro', null);
+    </script>
+    <div class="div_contenedor_principal">
+        <div class="div_encabezado">
+            <h3>Libros</h3>
+        </div>
+        <div class="div_navegacion">
+            <div class="div_titulo_pagina">
+                <h3>Biblioteca</h3>
+            </div>
+            <div class="div_botones_navegacion">
+                <input type="button" class="button btn_libros btn_pagina_actual" value="Libros">
+                <input type="button" class="button btn_autores" value="Autores">
+                <input type="button" class="button btn_temas" value="Temas">
+                <input type="button" class="button btn_prestamos" value="Prestamos">
+                <input type="button" class="button btn_usuarios" value="Usuarios">
+                <input type="button" class="button btn_salir" value="Salir">
+            </div>
+        </div>
+        <div class="div_ver_libros">
+            <div class="div_titulo_pantalla">
+                <h3>Listado general de libros</h3>
+                <input type="button" class="button" value="Agregar" id="btn_agregar_nuevo_libro">
+                <input type="button" class="button" value="Devolver" id="btn_devolver_libro">
+            </div>
+            <div class="div_tabla">
+                <table id="table_libros" class="tabla">
+                </table>
+            </div>
+            <div class="div_botones_inferiores">
+                <input type="button" class="button" value="Anterior" id="btn_anterior_libros">
+                <label id="lbl_rango_libros"></label>
+                <input type="button" class="button" value="Siguiente" id="btn_siguiente_libros">
+            </div>
+        </div>
+    </div>
+    <script src="script_libros.js"></script>
+    <script type="text/javascript">
+        //ObtenerAutores();
+    </script>
+</body>
+
+</html>

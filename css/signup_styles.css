@@ -1,0 +1,169 @@
+@import url('https://fonts.googleapis.com/css?family=Nunito');
+@import url('https://fonts.googleapis.com/css?family=Muli');
+@import url('https://fonts.googleapis.com/css?family=Oxygen');
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Oxygen', sans-serif;
+    font-weight: 400;
+}
+
+.div_contenedor_principal {
+    position: absolute;
+    border: solid 2px;
+    border-color: rgb(64, 88, 134);
+    width: 800px;
+    /*top: 50%;*/
+    left: 50%;
+    margin-left: -400px;
+    /*margin-top: -22%;*/
+    padding-top: 0;
+    text-align: center;
+}
+
+.div_contenedor_editar {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+}
+
+.div_encabezado {
+    height: 60px;
+    width: 100%;
+    background-color: rgb(64, 88, 134);
+    color: white;
+    padding-top: 1px;
+    padding-bottom: 10px;
+}
+
+.div_encabezado h3 {
+    position: relative;
+    top: 10px;
+    width: 50px;
+    height: 10px;
+    margin-left: 10px;
+}
+
+.div_titulo_pagina {
+    text-align: center;
+}
+
+.div_titulo_pagina h1 {
+    margin-bottom: 0;
+    margin-top: 5px;
+}
+
+.input_signup {
+    height: 20px;
+    padding: 5px 0 5px 25px;
+}
+
+.div_formulario_signup, .form_img {
+    display: flex;
+    flex-flow: row;
+}
+
+.div_formulario_login {
+    position: relative;
+    top: 20%;
+}
+
+.div_formulario_izquierda, .div_formulario_derecha {
+    width: 50%;
+}
+
+.form-inputs {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    padding: 10px 10px 10px 10px;
+    text-align: left;
+}
+
+.form-inputs select {
+    height: 35px;
+}
+
+.div_autorizacion {
+    display: flex;
+    flex-flow: row;
+}
+
+#div_autorizacion_menor {
+    display: none;
+}
+
+#btn_registrar {
+    margin-top: 30px;
+    margin-left: 50%;
+    width: 50%;
+    height: 30px;
+}
+
+#div_principal_login {
+    width: 400px;
+    left: 50%;
+    margin-left: -200px;
+}
+
+.form-login {
+    display: flex;
+    flex-direction: column;
+    padding: 0 75px 0 75px;
+    text-align: left;
+}
+
+.input_login {
+    height: 30px;
+    margin-bottom: 10px;
+}
+
+a {
+    margin-bottom: 10px;
+}
+
+#div_principal_login a {
+    font-size: 16px;
+    text-align: center;
+}
+
+#div_principal_terminos {
+    width: 800px;
+}
+
+p {
+    overflow-y: scroll;
+    text-align: justify;
+}
+
+#btn_regresar_terminos_condiciones {
+    margin-bottom: 10px;
+}
+
+.foto_perfil {
+    height: 100px;
+    width: 100px;
+}
+
+#file_imagen {
+    width: 200px;
+    height: 60px;
+}
+
+.form_img {
+    margin-left: 25px;
+    margin-top: 25px;
+}
+
+#txt_url_img_perfil {
+    margin-bottom: 10px;
+}
+
+.div_autorizacion {
+    margin-top: 10px;
+}
+
+a, a:visited, a:hover, a:active {
+  color: blue;
+}

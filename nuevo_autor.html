@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>Biblioteca</title>
+    <link rel="stylesheet" href="css/index.css">
+    <script src="jquery.min.js"></script>
+</head>
+
+<body>
+    <script type="text/javascript">
+        if (localStorage.getItem('sesion') == null || localStorage.getItem('sesion') == 0) window.location.href = 'login.html';
+        localStorage.setItem('editar_libro', null);
+    </script>
+    <div class="div_contenedor_principal">
+        <div class="div_encabezado">
+            <h3>Nuevo Autor</h3>
+        </div>
+        <div class="div_navegacion">
+            <div class="div_titulo_pagina">
+                <h3>Biblioteca</h3>
+            </div>
+            <div class="div_botones_navegacion">
+                <input type="button" class="button btn_libros" value="Libros">
+                <input type="button" class="button btn_autores btn_pagina_actual" value="Autores">
+                <input type="button" class="button btn_temas" value="Temas">
+                <input type="button" class="button btn_salir" value="Salir">
+            </div>
+        </div>
+        <div class="div_ver_libros">
+            <div class="div_titulo_pantalla">
+                <h3>Agregar Nuevo Autor</h3>
+            </div>
+            <div class="div_formulario_agregar">
+                <div class="div_labels">
+                    <label>Nombres</label>
+                    <label>Apellidos</label>
+                    <label>Nacionalidad</label>
+                    <label>Genero</label>
+                    <label>Fecha de Nacimiento</label>
+                    <label>Fecha de Fallecimiento</label>
+                    <label>Fecha de Ingreso</label>
+                </div>
+                <div class="div_inputs">
+                    <input type="text" id="txt_nombres_autor" onkeypress="return ValidarEntradaLetras(event);">
+                    <input type="text" id="txt_apellidos_autor" onkeypress="return ValidarEntradaLetras(event);">
+                    <select id="slc_nacionalidad_autor" class="slc_pais"></select>
+                    <div class="div_genero_autor">
+                        <input type="radio" name="radio_genero_autor" id="radio_masculino_autor" value="1">
+                        <label for="radio_masculino_autor">Maculino</label>
+                        <input type="radio" name="radio_genero_autor" id="radio_femenino_autor" value="0">
+                        <label for="radio_femenino_autor">Femenino</label>
+                    </div>
+                    <input type="text" id="txt_fecha_nacimiento_autor" onkeypress="return ValidarEntradaFecha(event);">
+                    <input type="text" id="txt_fecha_fallecimiento_autor" onkeypress="return ValidarEntradaFecha(event);">
+                    <input type="text" id="txt_fecha_ingreso_autor" disabled>
+                </div>
+            </div>
+            <div class="div_botones_inferiores botones_agregar_libro">
+                <input type="button" class="button" value="Regresar" id="btn_regresar_agregar_autor">
+                <input type="button" class="button" value="Aceptar" id="btn_aceptar_agregar_autor">
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript" src="script_validaciones.js"></script>
+    <script src="script_autores.js"></script>
+    <script src="paises.js"></script>
+    <script type="text/javascript">
+        $('#txt_fecha_ingreso_autor').val(ObtenerFechaHoy());
+        CargarPaises();
+    </script>
+</body>
+
+</html>

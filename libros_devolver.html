@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>Biblioteca</title>
+    <link rel="stylesheet" href="css/index.css">
+    <script src="jquery.min.js"></script>
+</head>
+
+<body>
+    <script type="text/javascript">
+        if (localStorage.getItem('sesion') == 'null' || localStorage.getItem('sesion') == 0) window.location.href = 'login.html';
+        localStorage.setItem('editar_autor', null);
+        localStorage.setItem('editar_tema', null);
+    </script>
+    <div class="div_contenedor_principal">
+        <div class="div_encabezado">
+            <h3>Devolver Libro</h3>
+        </div>
+        <div class="div_navegacion">
+            <div class="div_titulo_pagina">
+                <h3>Biblioteca</h3>
+            </div>
+            <div class="div_botones_navegacion">
+                <input type="button" class="button btn_libros" value="Libros">
+                <input type="button" class="button btn_autores" value="Autores">
+                <input type="button" class="button btn_temas" value="Temas">
+                <input type="button" class="button btn_prestamos btn_pagina_actual" value="Prestamos">
+                <input type="button" class="button btn_usuarios" value="Usuarios">
+                <input type="button" class="btn_salir button" value="Salir">
+            </div>
+        </div>
+        <div class="div_ver_libros">
+            <div class="div_titulo_pantalla">
+                <h3>Devolver Libro</h3>
+            </div>
+            <div class="div_elementos_busqueda">
+                <label>Codigo de prestamo: </label>
+                <input type="text" id="txt_codigo_prestamo">
+                <input type="button" class="button" value="Buscar" id="btn_buscar_prestamo" style="margin-bottom: 10px;">
+            </div>
+            <div class="div_formulario_agregar">
+                <table id="table_libro" class="tabla mostrar_info">
+                    <tr>
+                        <th>Clasificacion</th>
+                        <th>Libro</th>
+                    </tr>
+                    <tr>
+                        <td>Libro</td>
+                        <td id="td_libro_titulo"></td>
+                    </tr>
+                    <tr>
+                        <td>Autor</td>
+                        <td id="td_libro_autor"></td>
+                    </tr>
+                    <tr>
+                        <td>Tema</td>
+                        <td id="td_libro_tema"></td>
+                    </tr>
+                    <tr>
+                        <td>Ubicacion</td>
+                        <td id="td_libro_ubicacion"></td>
+                    </tr>
+                    <tr>
+                        <td>Disponibles</td>
+                        <td id="td_libro_disponibles"></td>
+                    </tr>
+                    <tr>
+                        <td>Fecha Prestamo</td>
+                        <td id="td_libro_prestamo"></td>
+                    </tr>
+                    <tr>
+                        <td>Fecha Devolucion</td>
+                        <td id="td_libro_devolucion"></td>
+                    </tr>
+                    <tr></tr>
+                    <tr></tr>
+                </table>
+            </div>
+            <div class="div_botones_inferiores botones_agregar_libro">
+                <input type="button" class="button  btn_regresar_libros" value="Regresar">
+                <input type="button" class="button" value="Devolver" id="btn_aceptar_devolucion_libro">
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript" src="script_validaciones.js"></script>
+    <script src="script_libros.js"></script>
+    <script src="actualizar_estado_prestamos.js"></script>
+</body>
+
+</html>

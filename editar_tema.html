@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>Biblioteca</title>
+    <link rel="stylesheet" href="css/index.css">
+    <script src="jquery.min.js"></script>
+</head>
+
+<body>
+    <script type="text/javascript">
+        if (localStorage.getItem('sesion') == 'null' || localStorage.getItem('sesion') == 0) window.location.href = 'login.html';
+        if (localStorage.getItem('editar_tema') == 'null') window.location.href = 'temas.html';
+        localStorage.setItem('editar_libro', null);
+        localStorage.setItem('editar_autor', null);
+    </script>
+    <div class="div_contenedor_principal">
+        <div class="div_encabezado">
+            <h3>Editar</h3>
+        </div>
+        <div class="div_navegacion">
+            <div class="div_titulo_pagina">
+                <h3>Biblioteca</h3>
+            </div>
+            <div class="div_botones_navegacion">
+                <input type="button" class="button btn_libros" value="Libros">
+                <input type="button" class="button btn_autores" value="Autores">
+                <input type="button" class="button btn_temas btn_pagina_actual" value="Temas">
+                <input type="button" class="button btn_salir" value="Salir">
+            </div>
+        </div>
+        <div class="div_ver_libros">
+            <div class="div_titulo_pantalla">
+                <h3>Editar Temas</h3>
+            </div>
+            <div class="div_formulario_agregar">
+                <div class="div_labels">
+                    <label>Tema</label>
+                    <label>Fecha de ingreso</label>
+                </div>
+                <div class="div_inputs">
+                    <input type="text" id="txt_nombre_tema_editar" onkeypress="return ValidarEntradaLetras(event);">
+                    <input type="text" id="txt_fecha_ingreso_tema_editar" disabled>
+                </div>
+            </div>
+            <div class="div_botones_inferiores botones_agregar_libro">
+                <input type="button" class="button" value="Regresar" id="btn_regresar_editar_tema">
+                <input type="button" class="button" value="Aceptar" id="btn_aceptar_editar_tema">
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript" src="script_validaciones.js"></script>
+    <script type="text/javascript" src="script_temas.js"></script>
+    <script type="text/javascript">
+        SetearDatosTema();
+    </script>
+</body>
+
+</html>

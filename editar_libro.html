@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>Biblioteca</title>
+    <link rel="stylesheet" href="css/index.css">
+    <script src="jquery.min.js"></script>
+</head>
+
+<body>
+    <script type="text/javascript">
+        if (localStorage.getItem('sesion') == 'null' || localStorage.getItem('sesion') == 0) window.location.href = 'login.html';
+        if (localStorage.getItem('editar_libro') == 'null') window.location.href = 'libros.html';
+        localStorage.setItem('editar_autor', null);
+        localStorage.setItem('editar_tema', null);
+    </script>
+    <div class="div_contenedor_principal">
+        <div class="div_encabezado">
+            <h3>Editar</h3>
+        </div>
+        <div class="div_navegacion">
+            <div class="div_titulo_pagina">
+                <h3>Biblioteca</h3>
+            </div>
+            <div class="div_botones_navegacion">
+                <input type="button" class="button btn_pagina_actual btn_libros" value="Libros">
+                <input type="button" class="button btn_autores" value="Autores">
+                <input type="button" class="button btn_temas" value="Temas">
+                <input type="button" class="btn_salir button" value="Salir">
+            </div>
+        </div>
+        <div class="div_ver_libros">
+            <div class="div_titulo_pantalla">
+                <h3>Editar libro</h3>
+            </div>
+            <div class="div_formulario_agregar">
+                <div class="div_labels">
+                    <label>Titulo</label>
+                    <label>Autor</label>
+                    <label>Tema</label>
+                    <label>Existencia</label>
+                    <label>Ubicación</label>
+                    <label>Fecha de ingreso</label>
+                </div>
+                <div class="div_inputs">
+                    <input type="text" id="txt_titulo_libro_editar">
+                    <select id="slc_autor_libro_editar" class="slc_autor"></select>
+                    <select id="slc_tema_libro_editar" class="slc_tema"></select>
+                    <input type="text" id="txt_existencia_editar" onkeypress="return ValidarEntradaEntero(event);">
+                    <input type="text" id="txt_ubicacion_editar">
+                    <input type="text" id="txt_fecha_registro_libro_editar" disabled>
+                </div>
+            </div>
+            <div class="div_botones_inferiores botones_agregar_libro">
+                <input type="button" class="button" value="Regresar" id="btn_regresar_editar_libro">
+                <input type="button" class="button" value="Aceptar" id="btn_aceptar_editar_libro">
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript" src="script_validaciones.js"></script>
+    <script src="script_libros.js">
+    </script>
+    <script type="text/javascript">
+        CargarAutores();
+        CargarTemas();
+        SetearDatosLibro();
+    </script>
+</body>
+
+</html>

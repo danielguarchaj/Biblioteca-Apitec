@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+    <meta charset="utf-8">
+    <title>Biblioteca</title>
+    <link rel="stylesheet" href="css/signup_styles.css">
+    <script src="jquery.min.js"></script>
+</head>
+
+<body>
+    <script type="text/javascript">
+        if (localStorage.getItem('sesion') != null && localStorage.getItem('sesion') == 1) window.location.href = 'libros.html';
+    </script>
+    <div class="div_contenedor_principal" id="div_principal_terminos">
+        <div class="div_encabezado">
+            <h3>Condiciones</h3>
+        </div>
+        <div class="div_titulo_pagina">
+            <h1>TERMINOS Y CONDICIONES DE USO</h1>
+        </div>
+        <div class="div_formulario_login div_parrafo">
+            <p>
+                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Numquam adipisci nemo qui laborum recusandae provident optio, consequatur asperiores deserunt perferendis nobis harum, ducimus non a quas officia quia, cumque illum! Lorem ipsum dolor sit amet,
+                consectetur adipisicing elit. Numquam adipisci nemo qui laborum recusandae provident optio, consequatur asperiores deserunt perferendis nobis harum, ducimus non a quas officia quia, cumque illum! Lorem ipsum dolor sit amet, consectetur
+                adipisicing elit. Numquam adipisci nemo qui laborum recusandae provident optio, consequatur asperiores deserunt perferendis nobis harum, ducimus non a quas officia quia, cumque illum! Lorem ipsum dolor sit amet, consectetur adipisicing
+                elit. Numquam adipisci nemo qui laborum recusandae provident optio, consequatur asperiores deserunt perferendis nobis harum, ducimus non a quas officia quia, cumque illum! Lorem ipsum dolor sit amet, consectetur adipisicing elit. Numquam
+                adipisci nemo qui laborum recusandae provident optio, consequatur asperiores deserunt perferendis nobis harum, ducimus non a quas officia quia, cumque illum! Lorem ipsum dolor sit amet, consectetur adipisicing elit. Numquam adipisci nemo
+                qui laborum recusandae provident optio, consequatur asperiores deserunt perferendis nobis harum, ducimus non a quas officia quia, cumque illum! Lorem ipsum dolor sit amet, consectetur adipisicing elit. Numquam adipisci nemo qui laborum
+                recusandae provident optio, consequatur asperiores deserunt perferendis nobis harum, ducimus non a quas officia quia, cumque illum! Lorem ipsum dolor sit amet, consectetur adipisicing elit. Numquam adipisci nemo qui laborum recusandae
+                provident optio, consequatur asperiores deserunt perferendis nobis harum, ducimus non a quas officia quia, cumque illum!
+            </p>
+        </div>
+        <div>
+            <input type="button" class="button" value="Regresar" id="btn_regresar_terminos_condiciones">
+        </div>
+    </div>
+    <script>
+        $('#btn_regresar_terminos_condiciones').click(function() {
+            window.location.href = 'signup.html';
+        })
+    </script>
+</body>
+
+</html>
