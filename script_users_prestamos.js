@@ -51,6 +51,9 @@ function VerLibrosPrestados() {
     else return;
     var usuario_index = localStorage.user_logeado;
     var usuarios = JSON.parse(localStorage.usuarios);
+    var libro_info;
+    var nombre_autor;
+    var nombre_tema;
     var libros_prestados_html = `<tr>
                             <th>#</th>
                             <th>Codigo</th>
@@ -73,9 +76,9 @@ function VerLibrosPrestados() {
                             </tr>`;
     $.each(Prestamos_retreived, function(index, prestamo) {
         if (usuarios[usuario_index].id == prestamo.usuario_id && (prestamo.estado == 1 || prestamo.estado == 2)) {
-            var libro_info = ObtenerDatosLibro(prestamo.libro_id);
-            var nombre_autor = ObtenerInfoAutor(libro_info.autor_id);
-            var nombre_tema = ObtenerInfoTema(libro_info.tema_id);
+            libro_info = ObtenerDatosLibro(prestamo.libro_id);
+            nombre_autor = ObtenerInfoAutor(libro_info.autor_id);
+            nombre_tema = ObtenerInfoTema(libro_info.tema_id);
             libros_prestados_html += '<tr>';
             libros_prestados_html += '<td>' + prestamo.prestamo_id + '</td>';
             libros_prestados_html += '<td>' + prestamo.token + '</td>';
@@ -87,9 +90,9 @@ function VerLibrosPrestados() {
             libros_prestados_html += ObtenerEstadoPrestamo(prestamo.estado);
             libros_prestados_html += '</tr>';
         }else if (usuarios[usuario_index].id == prestamo.usuario_id && (prestamo.estado == 3 || prestamo.estado == 4)) {
-            var libro_info = ObtenerDatosLibro(prestamo.libro_id);
-            var nombre_autor = ObtenerInfoAutor(libro_info.autor_id);
-            var nombre_tema = ObtenerInfoTema(libro_info.tema_id);
+            libro_info = ObtenerDatosLibro(prestamo.libro_id);
+            nombre_autor = ObtenerInfoAutor(libro_info.autor_id);
+            nombre_tema = ObtenerInfoTema(libro_info.tema_id);
             libros_devueltos_html += '<tr>';
             libros_devueltos_html += '<td>' + prestamo.prestamo_id + '</td>';
             libros_devueltos_html += '<td>' + prestamo.token + '</td>';
