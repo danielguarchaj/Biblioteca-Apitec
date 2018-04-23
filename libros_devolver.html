@@ -10,7 +10,7 @@
 
 <body>
     <script type="text/javascript">
-        if (localStorage.getItem('sesion') == 'null' || localStorage.getItem('sesion') == 0) window.location.href = 'login.html';
+        if (localStorage.getItem('sesion') == 'null' || localStorage.getItem('sesion') != 1 || localStorage.token_prestamo==null) window.location.href = 'login.html';
         localStorage.setItem('editar_autor', null);
         localStorage.setItem('editar_tema', null);
     </script>
@@ -87,6 +87,9 @@
     <script type="text/javascript" src="script_validaciones.js"></script>
     <script src="script_libros.js"></script>
     <script src="actualizar_estado_prestamos.js"></script>
+    <script type="text/javascript">
+        SetearDatosLibro('devolver', localStorage.token_prestamo);
+    </script>
 </body>
 
 </html>

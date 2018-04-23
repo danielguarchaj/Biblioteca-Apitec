@@ -269,6 +269,7 @@ function VerLibrosPrestados(_inicio, _fin) {
     var autores;
     var temas;
     var prestamos;
+    var prestamos_activos = [];
     var usuarios;
     var usr_index;
     if (localStorage.autores != null) autores = JSON.parse(localStorage.autores);
@@ -281,6 +282,9 @@ function VerLibrosPrestados(_inicio, _fin) {
     else return;
     if (localStorage.user_logeado != null) usr_index = localStorage.user_logeado;
     else return;
+    $.each(prestamos, function (index, prestamo) {
+        if(prestamo.estado < 3)prestamos_activos.push(prestamo);
+    })
     var prestamos_html = `<tr>
                             <th>#</th>
                             <th>Codigo</th>
@@ -293,12 +297,12 @@ function VerLibrosPrestados(_inicio, _fin) {
                             <th>Estado</th>
                             <th>Operacion</th>
                         </tr>`;
-    $.each(prestamos, function(index, prestamo) {
+    $.each(prestamos_activos, function(index, prestamo) {
         var datos_libro = ObtenerDatosLibro(prestamo.libro_id, Libros);
         if ((index >= _inicio) && (index < _fin)) {
             prestamos_html += '<tr>';
-            prestamos_html += '<td class="prestamo_seleccionado">' + prestamo.prestamo_id + '</td>';
-            prestamos_html += '<td>' + prestamo.token + '</td>';
+            prestamos_html += '<td>' + prestamo.prestamo_id + '</td>';
+            prestamos_html += '<td class="prestamo_seleccionado">' + prestamo.token + '</td>';
             prestamos_html += '<td>' + datos_libro.titulo + '</td>';
             prestamos_html += '<td>' + ObtenerDatosAutor(datos_libro.autor_id, autores) + '</td>';
             prestamos_html += '<td>' + ObtenerDatosTema(datos_libro.tema_id, temas) + '</td>';
@@ -306,13 +310,13 @@ function VerLibrosPrestados(_inicio, _fin) {
             prestamos_html += '<td>' + prestamo.fecha_devolucion + '</td>';
             prestamos_html += '<td>' + usuarios[usr_index].nombres + ' ' + usuarios[usr_index].apellidos + '</td>';
             prestamos_html += '<td>' + usuarios[usr_index].estado + '</td>';
-            prestamos_html += '<td> <input type="button" class="button tabla_button" value="Devolver" onclick="ObtenerIdDevolverLibroTabla(this)"> </td>';
+            prestamos_html += '<td> <input type="button" class="button tabla_button" value="Devolver" onclick="ObtenerTokenDevolverLibroTabla(this)"> </td>';
             prestamos_html += '</tr>';
         } else return;
     });
     $('#table_libros_prestados').html(prestamos_html);
-    Libros.length < saltos_tabla ? $('#lbl_rango_libros').html(`Del ${inicio_actual+1} al ${Libros.length} de ${Libros.length}`) : $('#lbl_rango_libros').html(`Del ${inicio_actual+1} al ${fin_actual} de ${Libros.length}`);
-    if (Libros.length == 0) $('#lbl_rango_libros').html('Del 0 al 0 de 0');
+    prestamos_activos.length < saltos_tabla_prestamos ? $('#lbl_rango_libros').html(`Del ${inicio_actual_prestamos+1} al ${prestamos_activos.length} de ${prestamos_activos.length}`) : $('#lbl_rango_libros').html(`Del ${inicio_actual_prestamos+1} al ${fin_actual_prestamos} de ${prestamos_activos.length}`);
+    if (prestamos_activos.length == 0) $('#lbl_rango_libros').html('Del 0 al 0 de 0');
 }
 
 
@@ -402,8 +406,9 @@ function ObtenerDatosPrestamo(_token) {
 }
 
 /*
-    Funcionq q no recibe parametros y setea los datos a los txts corresponidentes
-    Cargando el id del elemento desde local storage
+    Funcionq q recibe como parametros parametros el tipo de transaccion y el token del prestamo y setea los datos a los
+    elementos correspondientes de la tabla devolucion de libro
+    Si no recibe parametros se entiende que sera para editar libro y se cargara el id del libro a editar desde local storage
 */
 function SetearDatosLibro(_transaccion, _codigo_prestamo) {
     if (_transaccion == 'devolver' && _codigo_prestamo != '') {
@@ -412,6 +417,7 @@ function SetearDatosLibro(_transaccion, _codigo_prestamo) {
         var indice = ObtenerLibroIndex(prestamo.libro_id);
         var autor = ObtenerInfoAutor(Libros[indice].autor_id);
         var tema = ObtenerInfoTema(Libros[indice].tema_id);
+        $('#txt_codigo_prestamo').val(_codigo_prestamo);
         $('#td_libro_titulo').html(Libros[indice].titulo);
         $('#td_libro_autor').html(autor.nombres + ' ' + autor.apellidos);
         $('#td_libro_tema').html(tema.tema);
@@ -513,6 +519,18 @@ function ObtenerIdEditarLibroTabla(_elemento) {
     var id_libro = parseInt($(_elemento).closest('tr').find('.libro_seleccionado').text());
     localStorage.setItem('editar_libro', id_libro);
     window.location.href = 'editar_libro.html';
+}
+
+/*
+    Funion que se llama desde cada boton de cada elemento de la tabla que recibe como parametro el boton
+    Se obtiene el id del elemento por medio de jquery
+    Se guarda el id en localStorage
+    se redirige a editar_libro.html
+*/
+function ObtenerTokenDevolverLibroTabla(_elemento) {
+    var token_prestamo = $(_elemento).closest('tr').find('.prestamo_seleccionado').text();
+    localStorage.setItem('token_prestamo', token_prestamo);
+    window.location.href = 'libros_devolver.html';
 }
 
 $(function() {
@@ -624,7 +642,7 @@ $(function() {
     /*
         Eventos de botones de navegacion que redirigen a sus respectivas pantallas y modificar el valor de variables en localStorage
     */
-    $('#btn_regresar_editar_libro').click(function() {
+    $('.btn_regresar_libros').click(function() {
         window.location.href = 'libros.html';
         localStorage.setItem('editar_libro', null);
     });
