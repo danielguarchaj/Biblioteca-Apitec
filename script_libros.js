@@ -297,7 +297,7 @@ function VerLibrosPrestados(_inicio, _fin) {
         var datos_libro = ObtenerDatosLibro(prestamo.libro_id, Libros);
         if ((index >= _inicio) && (index < _fin)) {
             prestamos_html += '<tr>';
-            prestamos_html += '<td class="prestamo_seleccionado">' + prestamo.id + '</td>';
+            prestamos_html += '<td class="prestamo_seleccionado">' + prestamo.prestamo_id + '</td>';
             prestamos_html += '<td>' + prestamo.token + '</td>';
             prestamos_html += '<td>' + datos_libro.titulo + '</td>';
             prestamos_html += '<td>' + ObtenerDatosAutor(datos_libro.autor_id, autores) + '</td>';
