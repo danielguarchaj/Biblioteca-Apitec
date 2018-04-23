@@ -11,11 +11,15 @@ var libro = { //Protoripo libro que sirve para crear nuevos autores
 var saltos_tabla = 3; //variable para determinar cuantos elementos se muestran en la tabla
 var inicio_actual = 0; //variable para saber en que elemento se encuentra el inicio de la tabla actualmente
 var fin_actual = inicio_actual + saltos_tabla; //variable que se calcula a partir de la suma del inicio actual y
+var saltos_tabla_prestamos = 5;
+var inicio_actual_prestamos = 0;
+var fin_actual_prestamos = inicio_actual_prestamos + saltos_tabla_prestamos;
 //los saltos de tabla indica el fin acutal de la tabla
 
 CargarLibros(); //Se cargan libros de local storeage si existen
 //GenerarLibrosTest();
 VerLibros(inicio_actual, fin_actual); //se muestran los libros en la tabla segun las variables previamente definidas
+VerLibrosPrestados(inicio_actual_prestamos, fin_actual_prestamos);
 
 function CargarLibros() { //funcion que carga el arreglo libros desde localStorage
     var retrievedObject = localStorage.getItem('libros');
@@ -180,9 +184,9 @@ function ValidarRegistroNuevoLibro() {
     recorre el arreglo de objetos y devuelve el objeto que haga coincidencia con el id recibido
 */
 function ObtenerDatosAutor(_id, _array) {
-    var datos = '';
+    var datos;
     $.each(_array, function(index, value) {
-        if (_id == value.autor_id) datos += value.nombres + ' ' + value.apellidos;
+        if (_id == value.autor_id) datos = value.nombres + ' ' + value.apellidos;
     })
     return datos;
 }
@@ -192,9 +196,29 @@ function ObtenerDatosAutor(_id, _array) {
     recorre el arreglo de objetos y devuelve el objeto que haga coincidencia con el id recibido
 */
 function ObtenerDatosTema(_id, _array) {
-    var datos = '';
+    var datos;
     $.each(_array, function(index, value) {
-        if (_id == value.tema_id) datos += value.tema;
+        if (_id == value.tema_id) datos = value.tema;
+    })
+    return datos;
+}
+
+/*
+    Funcion ObtenerDatosUsuario que recibe como parametro el id del usuario y el array de usuarios, devuelve toda la informacion
+    como objeto del usuario que coincida con el id recibido
+*/
+function ObtenerDatosUsuario(_id, _array) {
+    var datos;
+    $.each(_array, function(index, value) {
+        if (_id == value.id) datos = value;
+    })
+    return datos;
+}
+
+function ObtenerDatosLibro(_id, _array) {
+    var datos;
+    $.each(_array, function(index, value) {
+        if (_id == value.libro_id) datos = value;
     })
     return datos;
 }
@@ -229,13 +253,68 @@ function VerLibros(_inicio, _fin) {
             libros_html += '<td>' + libro.disponibles + '</td>';
             libros_html += '<td> <input type="button" class="button tabla_button" value="Editar" onclick="ObtenerIdEditarLibroTabla(this)"> - ' +
                 '<input type="button" class="button tabla_button" value="Eliminar" onclick="EliminarLibroTabla(this)"> </td>';
-            libros_html += '</td>';
+            libros_html += '</tr>';
         } else return;
     });
     $('#table_libros').html(libros_html);
     Libros.length < saltos_tabla ? $('#lbl_rango_libros').html(`Del ${inicio_actual+1} al ${Libros.length} de ${Libros.length}`) : $('#lbl_rango_libros').html(`Del ${inicio_actual+1} al ${fin_actual} de ${Libros.length}`);
     if (Libros.length == 0) $('#lbl_rango_libros').html('Del 0 al 0 de 0');
 }
+
+/*
+    Funcion VerLibrosPrestados que recibe como parametros el inicio y el fin de la cantidad de elementos que se desea ver
+    Muestra informacion de todos los libros que se encuentran actualmente en prestamos es decir en estado 1 o 2
+*/
+function VerLibrosPrestados(_inicio, _fin) {
+    var autores;
+    var temas;
+    var prestamos;
+    var usuarios;
+    var usr_index;
+    if (localStorage.autores != null) autores = JSON.parse(localStorage.autores);
+    else return;
+    if (localStorage.temas != null) temas = JSON.parse(localStorage.temas);
+    else return;
+    if (localStorage.prestamos != null) prestamos = JSON.parse(localStorage.prestamos);
+    else return;
+    if (localStorage.usuarios != null) usuarios = JSON.parse(localStorage.usuarios);
+    else return;
+    if (localStorage.user_logeado != null) usr_index = localStorage.user_logeado;
+    else return;
+    var prestamos_html = `<tr>
+                            <th>#</th>
+                            <th>Codigo</th>
+                            <th>Libro</th>
+                            <th>Autor</th>
+                            <th>Tema</th>
+                            <th>Prestamo</th>
+                            <th>Devolucion</th>
+                            <th>Usuario</th>
+                            <th>Estado</th>
+                            <th>Operacion</th>
+                        </tr>`;
+    $.each(prestamos, function(index, prestamo) {
+        var datos_libro = ObtenerDatosLibro(prestamo.libro_id, Libros);
+        if ((index >= _inicio) && (index < _fin)) {
+            prestamos_html += '<tr>';
+            prestamos_html += '<td class="prestamo_seleccionado">' + prestamo.id + '</td>';
+            prestamos_html += '<td>' + prestamo.token + '</td>';
+            prestamos_html += '<td>' + datos_libro.titulo + '</td>';
+            prestamos_html += '<td>' + ObtenerDatosAutor(datos_libro.autor_id, autores) + '</td>';
+            prestamos_html += '<td>' + ObtenerDatosTema(datos_libro.tema_id, temas) + '</td>';
+            prestamos_html += '<td>' + prestamo.fecha_prestamo + '</td>';
+            prestamos_html += '<td>' + prestamo.fecha_devolucion + '</td>';
+            prestamos_html += '<td>' + usuarios[usr_index].nombres + ' ' + usuarios[usr_index].apellidos + '</td>';
+            prestamos_html += '<td>' + usuarios[usr_index].estado + '</td>';
+            prestamos_html += '<td> <input type="button" class="button tabla_button" value="Devolver" onclick="ObtenerIdDevolverLibroTabla(this)"> </td>';
+            prestamos_html += '</tr>';
+        } else return;
+    });
+    $('#table_libros_prestados').html(prestamos_html);
+    Libros.length < saltos_tabla ? $('#lbl_rango_libros').html(`Del ${inicio_actual+1} al ${Libros.length} de ${Libros.length}`) : $('#lbl_rango_libros').html(`Del ${inicio_actual+1} al ${fin_actual} de ${Libros.length}`);
+    if (Libros.length == 0) $('#lbl_rango_libros').html('Del 0 al 0 de 0');
+}
+
 
 /*
     Funcion que busca el elemento en arreglo de objetos por medio de un id que recibe como parametro
