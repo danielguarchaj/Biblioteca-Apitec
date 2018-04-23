@@ -8,10 +8,10 @@ var libro = { //Protoripo libro que sirve para crear nuevos autores
     disponibles: 0,
     fecha_ingreso: ''
 };
-var saltos_tabla = 3; //variable para determinar cuantos elementos se muestran en la tabla
+var saltos_tabla = 5; //variable para determinar cuantos elementos se muestran en la tabla
 var inicio_actual = 0; //variable para saber en que elemento se encuentra el inicio de la tabla actualmente
 var fin_actual = inicio_actual + saltos_tabla; //variable que se calcula a partir de la suma del inicio actual y
-var saltos_tabla_prestamos = 5;
+var saltos_tabla_prestamos = 2;
 var inicio_actual_prestamos = 0;
 var fin_actual_prestamos = inicio_actual_prestamos + saltos_tabla_prestamos;
 //los saltos de tabla indica el fin acutal de la tabla
@@ -576,68 +576,46 @@ $(function() {
             procede a llamar a la funcion VerLibros con los nuevos parametros
     */
     $('#btn_siguiente_libros').on('click', function() {
+        var prestamos;
+        if (localStorage.prestamos!=null)prestamos=JSON.parse(localStorage.prestamos);
+        if (fin_actual_prestamos < prestamos.length) {
+            inicio_actual_prestamos += saltos_tabla_prestamos;
+            fin_actual_prestamos += saltos_tabla_prestamos;
+            VerLibrosPrestados(inicio_actual_prestamos, fin_actual_prestamos);
+        }
+        if (inicio_actual_prestamos + saltos_tabla_prestamos > prestamos.length) {
+            $('#lbl_rango_libros').html(`Del ${inicio_actual+1} al ${prestamos.length} de ${prestamos.length}`);
+        }
+    });
+
+    /*
+        evento click del boton anterior para paginacion de la tabla
+        llama  la funcion VerLibrosPrestados con sus respectivos parametros si:
+            el inicio_actual es mayor o igual que saltos de tabla es decir existen elementos anteriores
+            actualiza las variables inicio y fin actual si se mueve
+            procede a llamar a la funcion VerLibros con los nuevos parametros
+    */
+    $('#btn_anterior_libros').on('click', function() {
+        if (inicio_actual_prestamos >= saltos_tabla_prestamos) {
+            inicio_actual_prestamos -= saltos_tabla_prestamos;
+            fin_actual_prestamos -= saltos_tabla_prestamos;
+            VerLibrosPrestados(inicio_actual_prestamos, fin_actual_prestamos);
+        }
+    });
+
+    /*
+        evento click del boton siguiente para paginacion de la tabla
+        llama  la funcion VerLibrosPrestados con sus respectivos parametros si:
+            el inicio_actual es menor que el tamano del arreglo es decir que existen elementos siguientes
+            actualiza las variables inicio y fin actual si se mueve
+            procede a llamar a la funcion VerLibros con los nuevos parametros
+    */
+    $('#btn_siguiente_libros').on('click', function() {
         if (fin_actual < Libros.length) {
             inicio_actual += saltos_tabla;
             fin_actual += saltos_tabla;
             VerLibros(inicio_actual, fin_actual);
         }
-        if (inicio_actual + saltos_tabla > Libros.length) {
-            $('#lbl_rango_libros').html(`Del ${inicio_actual+1} al ${Libros.length} de ${Libros.length}`);
-        }
-    });
-
-    /*
-        evento click del boton ver 10 libros para paginacion de la tabla
-        modifica las variables de saltos_tabla a 10
-        regersa al inicio
-        llama  la funcion VerLibros con sus respectivos parametros si:
-            el inicio_actual es mayor o igual que saltos de tabla osea q existen elementos anteriores
-            actualiza las variables inicio y fin actual si se mueve
-            procede a llamar a la funcion VerLibros con los nuevos parametros
-    */
-    $('#btn_ver_10_libros').on('click', function() {
-        saltos_tabla = 10;
-        inicio_actual = 0;
-        fin_actual = inicio_actual + saltos_tabla;
-        VerLibros(inicio_actual, fin_actual);
-        if (inicio_actual + saltos_tabla > Libros.length) {
-            $('#lbl_rango_libros').html(`Del ${inicio_actual+1} al ${Libros.length} de ${Libros.length}`);
-        }
-    });
-
-    /*
-        evento click del boton ver 20 libros para paginacion de la tabla
-        modifica las variables de saltos_tabla a 20
-        regersa al inicio
-        llama  la funcion VerLibros con sus respectivos parametros si:
-            el inicio_actual es mayor o igual que saltos de tabla osea q existen elementos anteriores
-            actualiza las variables inicio y fin actual si se mueve
-            procede a llamar a la funcion VerLibros con los nuevos parametros
-    */
-    $('#btn_ver_20_libros').on('click', function() {
-        saltos_tabla = 20;
-        inicio_actual = 0;
-        fin_actual = inicio_actual + saltos_tabla;
-        VerLibros(inicio_actual, fin_actual);
-        if (inicio_actual + saltos_tabla > Libros.length) {
-            $('#lbl_rango_libros').html(`Del ${inicio_actual+1} al ${Libros.length} de ${Libros.length}`);
-        }
-    });
-
-    /*
-        evento click del boton ver 50 libros para paginacion de la tabla
-        modifica las variables de saltos_tabla a 50
-        regersa al inicio
-        llama  la funcion VerLibros con sus respectivos parametros si:
-            el inicio_actual es mayor o igual que saltos de tabla osea q existen elementos anteriores
-            actualiza las variables inicio y fin actual si se mueve
-            procede a llamar a la funcion VerLibros con los nuevos parametros
-    */
-    $('#btn_ver_50_libros').on('click', function() {
-        saltos_tabla = 50;
-        inicio_actual = 0;
-        fin_actual = inicio_actual + saltos_tabla;
-        VerLibros(inicio_actual, fin_actual);
         if (inicio_actual + saltos_tabla > Libros.length) {
             $('#lbl_rango_libros').html(`Del ${inicio_actual+1} al ${Libros.length} de ${Libros.length}`);
         }
