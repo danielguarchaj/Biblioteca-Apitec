@@ -11,7 +11,7 @@ var libro = { //Protoripo libro que sirve para crear nuevos autores
 var saltos_tabla = 5; //variable para determinar cuantos elementos se muestran en la tabla
 var inicio_actual = 0; //variable para saber en que elemento se encuentra el inicio de la tabla actualmente
 var fin_actual = inicio_actual + saltos_tabla; //variable que se calcula a partir de la suma del inicio actual y
-var saltos_tabla_prestamos = 2;
+var saltos_tabla_prestamos = 10;
 var inicio_actual_prestamos = 0;
 var fin_actual_prestamos = inicio_actual_prestamos + saltos_tabla_prestamos;
 //los saltos de tabla indica el fin acutal de la tabla
@@ -297,8 +297,22 @@ function VerLibrosPrestados(_inicio, _fin) {
                             <th>Estado</th>
                             <th>Operacion</th>
                         </tr>`;
-    $.each(prestamos_activos, function(index, prestamo) {
+    $.each(prestamos, function(index, prestamo) {
         var datos_libro = ObtenerDatosLibro(prestamo.libro_id, Libros);
+        var fecha_actual = ObtenerFechaFormatoUSA(ObtenerFechaHoy());
+        var fecha_devolucion = ObtenerFechaFormatoUSA(prestamo.fecha_devolucion);
+        var diferencia_dias = Math.abs(parseInt(ObtenerDiferenciaDias(fecha_devolucion, fecha_actual)));
+        var estado;
+        var boton = '';
+        if (prestamo.estado == 1){
+            estado = '<td style="color: rgb(21, 219, 172);"> '+diferencia_dias+' dias</td>';
+        }else if(prestamo.estado == 2){
+            estado = '<td style="color: red;">Mora</td>';
+        }else if(prestamo.estado == 3){
+            estado = '<td style="color: green;">Devuelto</td>';
+        }else{
+            '<td style="color: red;">Devuleto con mora</td>';
+        }
         if ((index >= _inicio) && (index < _fin)) {
             prestamos_html += '<tr>';
             prestamos_html += '<td>' + prestamo.prestamo_id + '</td>';
@@ -309,8 +323,12 @@ function VerLibrosPrestados(_inicio, _fin) {
             prestamos_html += '<td>' + prestamo.fecha_prestamo + '</td>';
             prestamos_html += '<td>' + prestamo.fecha_devolucion + '</td>';
             prestamos_html += '<td>' + usuarios[usr_index].nombres + ' ' + usuarios[usr_index].apellidos + '</td>';
-            prestamos_html += '<td>' + usuarios[usr_index].estado + '</td>';
-            prestamos_html += '<td> <input type="button" class="button tabla_button" value="Devolver" onclick="ObtenerTokenDevolverLibroTabla(this)"> </td>';
+            prestamos_html += estado;
+            if (prestamo.estado < 3) {
+                prestamos_html += '<td> <input type="button" class="button tabla_button" value="Devolver" onclick="ObtenerTokenDevolverLibroTabla(this)"> </td>';
+            }else {
+                prestamos_html += '<td> Libro devuelto </td>';
+            }
             prestamos_html += '</tr>';
         } else return;
     });
