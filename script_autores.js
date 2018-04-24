@@ -521,6 +521,14 @@ $(function() {
         window.location.href = 'libros.html';
     });
 
+    $('.btn_prestamos').click(function() {
+        window.location.href = 'libros_prestamos.html';
+    });
+
+    $('.btn_usuarios').click(function() {
+        window.location.href = 'usuarios.html';
+    });
+
     $('.btn_temas').click(function() {
         window.location.href = 'temas.html';
     });

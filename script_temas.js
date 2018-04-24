@@ -279,6 +279,14 @@ $(function() {
         window.location.href = 'temas.html';
     });
 
+    $('.btn_prestamos').click(function() {
+        window.location.href = 'libros_prestamos.html';
+    });
+
+    $('.btn_usuarios').click(function() {
+        window.location.href = 'usuarios.html';
+    });
+
     /*
         evento click del boton registrar en nuevo tema
         llama a la funcion ValidarRegistroTema para validar campos y registrar
