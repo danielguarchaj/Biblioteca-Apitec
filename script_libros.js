@@ -686,6 +686,10 @@ $(function() {
         window.location.href = 'libros.html';
     });
 
+    $('.btn_usuarios').click(function() {
+        window.location.href = 'usuarios.html';
+    });
+
     $('#btn_devolver_libro').click(function() {
         window.location.href = 'libros_devolver.html';
     });
