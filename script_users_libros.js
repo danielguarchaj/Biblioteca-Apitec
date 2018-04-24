@@ -306,10 +306,10 @@ function VerificarPrestamo() {
         else nuevo_prestamo.prestamo_id = prestamos[prestamos.length - 1].prestamo_id + 1;
         nuevo_prestamo.libro_id = libro_id;
         nuevo_prestamo.usuario_id = usuarios[usuario_index].id;
-        //nuevo_prestamo.fecha_prestamo = $('#td_libro_prestamo').html();
-        //nuevo_prestamo.fecha_devolucion = $('#td_libro_devolucion').html();
-        nuevo_prestamo.fecha_prestamo = "10/4/2018";
-        nuevo_prestamo.fecha_devolucion = "15/4/2018";
+        nuevo_prestamo.fecha_prestamo = $('#td_libro_prestamo').html();
+        nuevo_prestamo.fecha_devolucion = $('#td_libro_devolucion').html();
+        //nuevo_prestamo.fecha_prestamo = "10/4/2018";
+        //nuevo_prestamo.fecha_devolucion = "15/4/2018";
         nuevo_prestamo.token = GenerarToken();
         nuevo_prestamo.estado = 1;
         prestamos.push(nuevo_prestamo);
