@@ -1,11 +1,11 @@
-var saltos_tabla_usuarios = 2;
+var saltos_tabla_usuarios = 10;
 var inicio_actual_usuarios = 0;
 var fin_actual_usuarios = inicio_actual_usuarios + saltos_tabla_usuarios;
 
 function ObtenerCantidadLibrosPrestados(_usuario_id, _prestamos) {
     var prestamos = 0;
     $.each(_prestamos, function(index, prestamo) {
-        if (_usuario_id == prestamo.usuario_id) prestamo++;
+        if (_usuario_id == prestamo.usuario_id) prestamos++;
     })
     return prestamos;
 }
@@ -31,7 +31,7 @@ function VerUsuarios(_inicio, _fin) {
     var prestamos;
     if (localStorage.usuarios != null) usuarios = JSON.parse(localStorage.usuarios);
     else return;
-    if (localStorage.prestamos != null) prestamos = JSON.parse(localStorage.usuarios);
+    if (localStorage.prestamos != null) prestamos = JSON.parse(localStorage.prestamos);
     else return;
     var usuarios_html = `<tr>
                             <th>#</th>
