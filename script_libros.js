@@ -282,9 +282,6 @@ function VerLibrosPrestados(_inicio, _fin) {
     else return;
     if (localStorage.user_logeado != null) usr_index = localStorage.user_logeado;
     else return;
-    $.each(prestamos, function (index, prestamo) {
-        if(prestamo.estado < 3)prestamos_activos.push(prestamo);
-    })
     var prestamos_html = `<tr>
                             <th>#</th>
                             <th>Codigo</th>
@@ -304,15 +301,16 @@ function VerLibrosPrestados(_inicio, _fin) {
         var diferencia_dias = Math.abs(parseInt(ObtenerDiferenciaDias(fecha_devolucion, fecha_actual)));
         var estado;
         var boton = '';
-        if (prestamo.estado == 1){
-            estado = '<td style="color: rgb(21, 219, 172);"> '+diferencia_dias+' dias</td>';
-        }else if(prestamo.estado == 2){
+        if (prestamo.estado == 1) {
+            estado = '<td style="color: rgb(21, 219, 172);"> ' + diferencia_dias + ' dias</td>';
+        } else if (prestamo.estado == 2) {
             estado = '<td style="color: red;">Mora</td>';
-        }else if(prestamo.estado == 3){
+        } else if (prestamo.estado == 3) {
             estado = '<td style="color: green;">Devuelto</td>';
-        }else{
-            '<td style="color: red;">Devuleto con mora</td>';
+        } else {
+            estado = '<td style="color: red;">Devuleto con mora</td>';
         }
+
         if ((index >= _inicio) && (index < _fin)) {
             prestamos_html += '<tr>';
             prestamos_html += '<td>' + prestamo.prestamo_id + '</td>';
@@ -324,17 +322,14 @@ function VerLibrosPrestados(_inicio, _fin) {
             prestamos_html += '<td>' + prestamo.fecha_devolucion + '</td>';
             prestamos_html += '<td>' + usuarios[usr_index].nombres + ' ' + usuarios[usr_index].apellidos + '</td>';
             prestamos_html += estado;
-            if (prestamo.estado < 3) {
-                prestamos_html += '<td> <input type="button" class="button tabla_button" value="Devolver" onclick="ObtenerTokenDevolverLibroTabla(this)"> </td>';
-            }else {
-                prestamos_html += '<td> Libro devuelto </td>';
-            }
+            if (prestamo.estado < 3) prestamos_html += '<td> <input type="button" class="button tabla_button" value="Devolver" onclick="ObtenerTokenDevolverLibroTabla(this)"> </td>';
+            else prestamos_html += '<td> <input type="button" class="" value="Devolver" onclick="ObtenerTokenDevolverLibroTabla(this)" disabled> </td>';
             prestamos_html += '</tr>';
         } else return;
     });
     $('#table_libros_prestados').html(prestamos_html);
-    prestamos_activos.length < saltos_tabla_prestamos ? $('#lbl_rango_libros').html(`Del ${inicio_actual_prestamos+1} al ${prestamos_activos.length} de ${prestamos_activos.length}`) : $('#lbl_rango_libros').html(`Del ${inicio_actual_prestamos+1} al ${fin_actual_prestamos} de ${prestamos_activos.length}`);
-    if (prestamos_activos.length == 0) $('#lbl_rango_libros').html('Del 0 al 0 de 0');
+    prestamos.length < saltos_tabla_prestamos ? $('#lbl_rango_libros').html(`Del ${inicio_actual_prestamos+1} al ${prestamos.length} de ${prestamos.length}`) : $('#lbl_rango_libros').html(`Del ${inicio_actual_prestamos+1} al ${fin_actual_prestamos} de ${prestamos.length}`);
+    if (prestamos.length == 0) $('#lbl_rango_libros').html('Del 0 al 0 de 0');
 }
 
 
@@ -611,9 +606,9 @@ $(function() {
             actualiza las variables inicio y fin actual si se mueve
             procede a llamar a la funcion VerLibros con los nuevos parametros
     */
-    $('#btn_siguiente_libros').on('click', function() {
+    $('#btn_siguiente_libros_prestados').on('click', function() {
         var prestamos;
-        if (localStorage.prestamos!=null)prestamos=JSON.parse(localStorage.prestamos);
+        if (localStorage.prestamos != null) prestamos = JSON.parse(localStorage.prestamos);
         if (fin_actual_prestamos < prestamos.length) {
             inicio_actual_prestamos += saltos_tabla_prestamos;
             fin_actual_prestamos += saltos_tabla_prestamos;
@@ -631,7 +626,7 @@ $(function() {
             actualiza las variables inicio y fin actual si se mueve
             procede a llamar a la funcion VerLibros con los nuevos parametros
     */
-    $('#btn_anterior_libros').on('click', function() {
+    $('#btn_anterior_libros_prestados').on('click', function() {
         if (inicio_actual_prestamos >= saltos_tabla_prestamos) {
             inicio_actual_prestamos -= saltos_tabla_prestamos;
             fin_actual_prestamos -= saltos_tabla_prestamos;
