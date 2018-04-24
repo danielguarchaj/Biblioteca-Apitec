@@ -1,3 +1,7 @@
+var index;
+var usuarios;
+if (localStorage.ver_perfil_index != null) index = JSON.parse(localStorage.ver_perfil_index);
+if (localStorage.usuarios != null) usuarios = JSON.parse(localStorage.usuarios);
 var saltos_tabla_usuarios = 10;
 var inicio_actual_usuarios = 0;
 var fin_actual_usuarios = inicio_actual_usuarios + saltos_tabla_usuarios;
@@ -57,7 +61,7 @@ function VerUsuarios(_inicio, _fin) {
             usuarios_html += '<td>' + ObtenerNombreDepartamento(usuario.municipio) + '</td>';
             usuarios_html += '<td>' + ObtenerCantidadLibrosPrestados(usuario.id, prestamos) + '</td>';
             usuarios_html += estado;
-            usuarios_html += '<td> <input type="button" class="button tabla_button" value="Ver" onclick="VerUsiarioPerfil(this)"> </td>';
+            usuarios_html += `<td> <input type="button" class="button tabla_button" value="Ver" onclick="VerPerfilUsuario(${index})"> </td>`;
             usuarios_html += '</tr>';
         } else return;
     });
@@ -67,6 +71,71 @@ function VerUsuarios(_inicio, _fin) {
 }
 
 VerUsuarios(inicio_actual_usuarios, fin_actual_usuarios);
+
+function VerPerfilUsuario(_index) {
+    localStorage.setItem('ver_perfil_index', _index);
+    window.location.href = 'admin_ver_perfil.html';
+}
+
+function SetearDatosPerfil() {
+    index = parseInt(index);
+    $('#txt_nombres_admin').val(usuarios[index].nombres);
+    $('#txt_nombres_admin').val(usuarios[index].nombres);
+    $('#txt_apellidos_admin').val(usuarios[index].apellidos);
+    $('#txt_direccion_admin').val(usuarios[index].direccion);
+    $('#txt_telefono_admin').val(usuarios[index].telefono);
+    $('#txt_correo_admin').val(usuarios[index].correo);
+    if (usuarios[index].genero == 1) $("#radio_masculino").attr('checked', true);
+    else $('#radio_femenino_admin').attr('checked', true);
+    $('#txt_nacimiento_admin').val(usuarios[index].nacimiento);
+    $('#txt_cui_admin').val(usuarios[index].cui);
+    $('#txt_zona_admin').val(usuarios[index].zona);
+    $('#txt_institucion_educativa_admin').val(usuarios[index].institucion);
+    $('#slc_escolaridad_admin').val(usuarios[index].escolaridad);
+    //var url = (usuarios[index].foto);
+    //var url = decodeURIComponent(escape(window.atob( usuarios[index].foto )));
+    //var url = atob(usuarios[index].foto);
+    //$('#img_foto').attr('src', usuarios[index].foto);
+}
+
+function VerDepartamentos() {
+    var departamentos_html = '';
+    $.each(Departamentos, function(index, depto) {
+        departamentos_html += '<option value="' + depto.id + '">' + depto.nombre + '</option>';
+    });
+    $('#slc_departamento_admin').html(departamentos_html);
+}
+
+function VerMunicipios() {
+    var depto = $('#slc_departamento_admin').val();
+    var municipios_html = '';
+    $.each(Municipios, function(index, municipio) {
+        if (depto == municipio.departamento_id)
+            municipios_html += '<option value="' + municipio.id + '">' + municipio.nombre + '</option>';
+    });
+    $('#slc_municipio_admin').html(municipios_html);
+}
+
+function SetearDepartamentoMunicipio() {
+    var depto = ObtenerDepartamentoId(usuarios[index].municipio);
+    var municipio = usuarios[index].municipio;
+    var municipios_html = '';
+    $.each(Municipios, function (index, municipio) {
+        if(depto == municipio.departamento_id)
+            municipios_html += '<option value="' + municipio.id + '">' + municipio.nombre + '</option>';
+    });
+    $('#slc_departamento_admin').val(depto);
+    $('#slc_municipio_admin').html(municipios_html);
+    $('#slc_municipio_admin').val(municipio);
+}
+
+function ObtenerDepartamentoId(_municipio_id) {
+    var departamento_id;
+    $.each(Municipios, function(index, municipio) {
+        if (_municipio_id == municipio.id)departamento_id = municipio.departamento_id;
+    });
+    return departamento_id;
+}
 
 /*
     evento click del boton anterior para paginacion de la tabla
