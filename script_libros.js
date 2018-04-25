@@ -215,6 +215,18 @@ function ObtenerDatosUsuario(_id, _array) {
     return datos;
 }
 
+/*
+    Funcion ObtenerUsuarioIndex que recibe como parametro el id del usuario y el array de usuarios, devuelve index del usuario
+    como variable entera del usuario que coincida con el id recibido
+*/
+function ObtenerUsuarioIndex(_id, _array) {
+    var indice;
+    $.each(_array, function(index, value) {
+        if (_id == value.id) indice = index;
+    })
+    return indice;
+}
+
 function ObtenerDatosLibro(_id, _array) {
     var datos;
     $.each(_array, function(index, value) {
@@ -328,8 +340,8 @@ function VerLibrosPrestados(_inicio, _fin) {
         } else return;
     });
     $('#table_libros_prestados').html(prestamos_html);
-    prestamos.length < saltos_tabla_prestamos ? $('#lbl_rango_libros').html(`Del ${inicio_actual_prestamos+1} al ${prestamos.length} de ${prestamos.length}`) : $('#lbl_rango_libros').html(`Del ${inicio_actual_prestamos+1} al ${fin_actual_prestamos} de ${prestamos.length}`);
-    if (prestamos.length == 0) $('#lbl_rango_libros').html('Del 0 al 0 de 0');
+    prestamos.length < saltos_tabla_prestamos ? $('#lbl_rango_libros_prestados').html(`Del ${inicio_actual_prestamos+1} al ${prestamos.length} de ${prestamos.length}`) : $('#lbl_rango_libros_prestados').html(`Del ${inicio_actual_prestamos+1} al ${fin_actual_prestamos} de ${prestamos.length}`);
+    if (prestamos.length == 0) $('#lbl_rango_libros_prestados').html('Del 0 al 0 de 0');
 }
 
 
@@ -452,29 +464,31 @@ function SetearDatosLibro(_transaccion, _codigo_prestamo) {
     }
 }
 
-/*function DeterminarEstadoUsuario(_usuario_id) {
+/*
+    Funcino UsuarioMoroso que recibe como parametro el id del usuario y el arreglo de prestamos
+    Retorna una variable booleana llamada moroso que representa el estado de cada usuario false = 1 true = 2
+    Recorre el arreglo de prestamos que recibe como parametro
+        En cada vuelta se busca coincidencia del id del usuario recibido con el usuario_id registrado en el prestamo
+        Si hay coincidencia y el estado del prestamos es 2 osea moroso se cambia el valor de la variable moroso a true
+    Se retorna la variable moroso
+*/
+function UsuarioMoroso(_id, _prestamos) {
+    var moroso = false;
     var usuarios;
     if (localStorage.usuarios != null) usuarios = JSON.parse(localStorage.usuarios);
     else return;
-    var usr_index;
-    $.each(usuarios, function (index, usr) {
-        if (_usuario_id == usr.id) {
-            usr_index = index;
-            return;
-        }
-    });
-    var prestamos;
-    if (localStorage.prestamos != null) prestamos = JSON.parse(localStorage.prestamos);
-    else return;
-
-    $.each(prestamos, function (index, prestamo) {
-
+    $.each(_prestamos, function (index, prestamo) {
+        if(_id==prestamo.usuario_id && prestamo.estado == 2)moroso=true;
     })
-}*/
+    return moroso;
+}
 
 function DevolverLibro(_token) {
     var prestamos;
+    var usuarios;
     if (localStorage.prestamos != null) prestamos = JSON.parse(localStorage.prestamos);
+    else return;
+    if (localStorage.usuarios != null) usuarios = JSON.parse(localStorage.usuarios);
     else return;
     $.each(prestamos, function(index, valor) {
         if (_token == valor.token) {
@@ -488,14 +502,19 @@ function DevolverLibro(_token) {
             if (diferencia_dias > 0 || valor.estado == 2) {
                 prestamos[index].estado = 4;
                 prestamos[index].mora = diferencia_dias;
-                //Cambio de estado de usuario de moroso a solvente pendiente:
             } else {
                 prestamos[index].estado = 3;
                 prestamos[index].dias_anticipacion = Math.abs(diferencia_dias);
             }
-            //return;
+            var usr_index;
+            if(!UsuarioMoroso(prestamos[index].usuario_id, prestamos)){
+                usr_index = ObtenerUsuarioIndex(prestamos[index].usuario_id, usuarios);
+                usuarios[usr_index].estado = 1;
+            }
+            return false;
         }
     });
+    localStorage.setItem('usuarios', JSON.stringify(usuarios));
     localStorage.setItem('prestamos', JSON.stringify(prestamos));
 }
 
