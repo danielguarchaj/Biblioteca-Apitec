@@ -118,6 +118,10 @@ body {
     background-color: #f2f2f2;
 }
 
+.ordenable {
+    cursor: pointer;
+}
+
 .tabla tr:hover {
     background-color: #ddd;
 }

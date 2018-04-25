@@ -242,35 +242,149 @@ function ObtenerDatosLibro(_id, _array) {
     recibidos
     Se insertan los elementos al html
 */
-function VerLibros(_inicio, _fin) {
+function VerLibros(_inicio, _fin, _filtro) {
     var Autores_retreived = JSON.parse(localStorage.getItem('autores'));
     var Temas_retreived = JSON.parse(localStorage.getItem('temas'));
     var libros_html = `<tr>
                             <th>#</th>
-                            <th>Libro</th>
-                            <th>Autor</th>
-                            <th>Tema</th>
-                            <th>Ubicación</th>
+                            <th onclick="OrdenarLibrosNombre(this)" class="ordenable">Libro</th>
+                            <th onclick="OrdenarLibrosAutor(this)" class="ordenable">Autor</th>
+                            <th onclick="OrdenarLibrosTema(this)" class="ordenable">Tema</th>
+                            <th onclick="OrdenarLibrosUbicacion(this)" class="ordenable">Ubicación</th>
                             <th>Disp</th>
                             <th>Operaciones</th>
                         </tr>`;
-    $.each(Libros, function(index, libro) {
-        if ((index >= _inicio) && (index < _fin)) {
-            libros_html += '<tr>';
-            libros_html += '<td class="libro_seleccionado">' + libro.libro_id + '</td>';
-            libros_html += '<td>' + libro.titulo + '</td>';
-            libros_html += '<td>' + ObtenerDatosAutor(libro.autor_id, Autores_retreived) + '</td>';
-            libros_html += '<td>' + ObtenerDatosTema(libro.tema_id, Temas_retreived) + '</td>';
-            libros_html += '<td>' + libro.ubicacion + '</td>';
-            libros_html += '<td>' + libro.disponibles + '</td>';
-            libros_html += '<td> <input type="button" class="button tabla_button" value="Editar" onclick="ObtenerIdEditarLibroTabla(this)"> - ' +
-                '<input type="button" class="button tabla_button" value="Eliminar" onclick="EliminarLibroTabla(this)"> </td>';
-            libros_html += '</tr>';
-        } else return;
-    });
+    if (_filtro == undefined) {
+        $.each(Libros, function(index, libro) {
+            if ((index >= _inicio) && (index < _fin)) {
+                libros_html += '<tr>';
+                libros_html += '<td class="libro_seleccionado">' + libro.libro_id + '</td>';
+                libros_html += '<td class="td_libro_titulo">' + libro.titulo + '</td>';
+                libros_html += '<td class="td_libro_autor">' + ObtenerDatosAutor(libro.autor_id, Autores_retreived) + '</td>';
+                libros_html += '<td class="td_libro_tema">' + ObtenerDatosTema(libro.tema_id, Temas_retreived) + '</td>';
+                libros_html += '<td class="td_libro_ubicacion">' + libro.ubicacion + '</td>';
+                libros_html += '<td>' + libro.disponibles + '</td>';
+                libros_html += '<td> <input type="button" class="button tabla_button" value="Editar" onclick="ObtenerIdEditarLibroTabla(this)"> - ' +
+                    '<input type="button" class="button tabla_button" value="Eliminar" onclick="EliminarLibroTabla(this)"> </td>';
+                libros_html += '</tr>';
+            } else return;
+        });
+    }else{
+        $.each(_filtro, function(index, libro) {
+            if ((index >= _inicio) && (index < _fin)) {
+                libros_html += '<tr>';
+                libros_html += '<td class="libro_seleccionado">' + libro.libro_id + '</td>';
+                libros_html += '<td class="td_libro_titulo">' + libro.titulo + '</td>';
+                libros_html += '<td class="td_libro_autor">' + ObtenerDatosAutor(libro.autor_id, Autores_retreived) + '</td>';
+                libros_html += '<td class="td_libro_tema">' + ObtenerDatosTema(libro.tema_id, Temas_retreived) + '</td>';
+                libros_html += '<td class="td_libro_ubicacion">' + libro.ubicacion + '</td>';
+                libros_html += '<td>' + libro.disponibles + '</td>';
+                libros_html += '<td> <input type="button" class="button tabla_button" value="Editar" onclick="ObtenerIdEditarLibroTabla(this)"> - ' +
+                    '<input type="button" class="button tabla_button" value="Eliminar" onclick="EliminarLibroTabla(this)"> </td>';
+                libros_html += '</tr>';
+            } else return;
+        });
+    }
+
     $('#table_libros').html(libros_html);
     Libros.length < saltos_tabla ? $('#lbl_rango_libros').html(`Del ${inicio_actual+1} al ${Libros.length} de ${Libros.length}`) : $('#lbl_rango_libros').html(`Del ${inicio_actual+1} al ${fin_actual} de ${Libros.length}`);
     if (Libros.length == 0) $('#lbl_rango_libros').html('Del 0 al 0 de 0');
+}
+
+
+var ascendente = false;
+
+
+function OrdenarLibrosNombre(_elemento) {
+    var libros_nombres = [];
+    var filtro = [];
+    $(".td_libro_titulo").each(function() {
+        libros_nombres.push($(this).text());
+    });
+    if (ascendente==false){
+        libros_nombres.sort().reverse();
+        ascendente = true;
+    }else{
+        libros_nombres.sort();
+        ascendente = false;
+    }
+    $.each(libros_nombres, function (index, nombre) {
+        $.each(Libros, function (indice, libro) {
+            if(libro.titulo == nombre)filtro.push(libro);
+        })
+    })
+    VerLibros(inicio_actual, fin_actual, filtro);
+}
+
+function OrdenarLibrosAutor(_elemento) {
+    var autores;
+    if(localStorage.autores!=null)autores=JSON.parse(localStorage.autores);
+    else return;
+    var libros_autor = [];
+    var filtro = [];
+    $(".td_libro_autor").each(function() {
+        libros_autor.push($(this).text());
+    });
+    if (ascendente==false){
+        libros_autor.sort().reverse();
+        ascendente = true;
+    }else{
+        libros_autor.sort();
+        ascendente = false;
+    }
+    $.each(libros_autor, function (index, autor) {
+        $.each(Libros, function (indice, libro) {
+            var autor_nombre = ObtenerDatosAutor(libro.autor_id, autores);
+            if(autor_nombre == autor)filtro.push(libro);
+        })
+    })
+    VerLibros(inicio_actual, fin_actual, filtro);
+}
+
+function OrdenarLibrosTema(_elemento) {
+    var temas;
+    if(localStorage.temas!=null)temas=JSON.parse(localStorage.temas);
+    else return;
+    var libros_temas = [];
+    var filtro = [];
+    $(".td_libro_tema").each(function() {
+        libros_temas.push($(this).text());
+    });
+    if (ascendente==false){
+        libros_temas.sort().reverse();
+        ascendente = true;
+    }else{
+        libros_temas.sort();
+        ascendente = false;
+    }
+    $.each(libros_temas, function (index, tema) {
+        $.each(Libros, function (indice, libro) {
+            var tema_nombre = ObtenerDatosTema(libro.tema_id, temas);
+            if(tema_nombre == tema)filtro.push(libro);
+        })
+    })
+    VerLibros(inicio_actual, fin_actual, filtro);
+}
+
+function OrdenarLibrosUbicacion(_elemento) {
+    var libros_ubicaciones = [];
+    var filtro = [];
+    $(".td_libro_ubicacion").each(function() {
+        libros_ubicaciones.push($(this).text());
+    });
+    if (ascendente==false){
+        libros_ubicaciones.sort().reverse();
+        ascendente = true;
+    }else{
+        libros_ubicaciones.sort();
+        ascendente = false;
+    }
+    $.each(libros_ubicaciones, function (index, ubicacion) {
+        $.each(Libros, function (indice, libro) {
+            if(libro.ubicacion == ubicacion)filtro.push(libro);
+        })
+    })
+    VerLibros(inicio_actual, fin_actual, filtro);
 }
 
 /*
@@ -477,8 +591,8 @@ function UsuarioMoroso(_id, _prestamos) {
     var usuarios;
     if (localStorage.usuarios != null) usuarios = JSON.parse(localStorage.usuarios);
     else return;
-    $.each(_prestamos, function (index, prestamo) {
-        if(_id==prestamo.usuario_id && prestamo.estado == 2)moroso=true;
+    $.each(_prestamos, function(index, prestamo) {
+        if (_id == prestamo.usuario_id && prestamo.estado == 2) moroso = true;
     })
     return moroso;
 }
@@ -507,7 +621,7 @@ function DevolverLibro(_token) {
                 prestamos[index].dias_anticipacion = Math.abs(diferencia_dias);
             }
             var usr_index;
-            if(!UsuarioMoroso(prestamos[index].usuario_id, prestamos)){
+            if (!UsuarioMoroso(prestamos[index].usuario_id, prestamos)) {
                 usr_index = ObtenerUsuarioIndex(prestamos[index].usuario_id, usuarios);
                 usuarios[usr_index].estado = 1;
             }
