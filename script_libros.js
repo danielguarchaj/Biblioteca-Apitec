@@ -249,10 +249,10 @@ function VerLibros(_inicio, _fin, _filtro) {
     var Temas_retreived = JSON.parse(localStorage.getItem('temas'));
     var libros_html = `<tr>
                             <th>#</th>
-                            <th onclick="OrdenarLibrosNombre(this)" class="ordenable">Libro</th>
-                            <th onclick="OrdenarLibrosAutor(this)" class="ordenable">Autor</th>
-                            <th onclick="OrdenarLibrosTema(this)" class="ordenable">Tema</th>
-                            <th onclick="OrdenarLibrosUbicacion(this)" class="ordenable">Ubicación</th>
+                            <th onclick="OrdenarLibrosNombre(this)" class="ordenable" id="th_libro_Titulo">Libro</th>
+                            <th onclick="OrdenarLibrosAutor(this)" class="ordenable" id="th_libro_Autor">Autor</th>
+                            <th onclick="OrdenarLibrosTema(this)" class="ordenable" id="th_libro_Tema">Tema</th>
+                            <th onclick="OrdenarLibrosUbicacion(this)" class="ordenable" id="th_libro_Ubicacion">Ubicación</th>
                             <th>Disp</th>
                             <th>Operaciones</th>
                         </tr>`;
@@ -404,8 +404,16 @@ function BuscarPrestamo(_busqueda) {
     VerLibrosPrestados(inicio_actual_prestamos, fin_actual_prestamos, filtro);
 }
 
-var ascendente = false;
 
+function MostrarFlecha(_campo) {
+    if (ascendente) {
+        $('#th_libro_'+_campo).html(_campo+' '+ flecha_arriba);
+    }else {
+        $('#th_libro_'+_campo).html(_campo+' ' +flecha_abajo);
+    }
+}
+
+var ascendente = false;
 
 function OrdenarLibrosNombre(_elemento) {
     var libros_nombres = [];
@@ -415,11 +423,9 @@ function OrdenarLibrosNombre(_elemento) {
     });
     if (ascendente) {
         libros_nombres.sort();
-        $(_elemento).html('Titulo ' + flecha_arriba);
         ascendente = false;
     } else {
         libros_nombres.sort().reverse();
-        $(_elemento).html('Titulo ' + flecha_abajo);
         ascendente = true;
     }
     $.each(libros_nombres, function(index, nombre) {
@@ -428,6 +434,7 @@ function OrdenarLibrosNombre(_elemento) {
         })
     })
     VerLibros(inicio_actual, fin_actual, filtro);
+    MostrarFlecha('Titulo');
 }
 
 function OrdenarLibrosAutor(_elemento) {
@@ -453,6 +460,7 @@ function OrdenarLibrosAutor(_elemento) {
         })
     })
     VerLibros(inicio_actual, fin_actual, filtro);
+    MostrarFlecha('Autor');
 }
 
 function OrdenarLibrosTema(_elemento) {
@@ -478,6 +486,7 @@ function OrdenarLibrosTema(_elemento) {
         })
     })
     VerLibros(inicio_actual, fin_actual, filtro);
+    MostrarFlecha('Tema');
 }
 
 function OrdenarLibrosUbicacion(_elemento) {
@@ -499,6 +508,7 @@ function OrdenarLibrosUbicacion(_elemento) {
         })
     })
     VerLibros(inicio_actual, fin_actual, filtro);
+    MostrarFlecha('Ubicacion');
 }
 
 /*
