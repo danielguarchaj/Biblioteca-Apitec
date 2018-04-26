@@ -38,6 +38,7 @@ function ActualizarEstadoPrestamo() {
     $.each(prestamos, function (index, prestamo) {
         var diff = ObtenerDiferenciaDias(ObtenerFechaFormatoUSA(prestamo.fecha_devolucion), ObtenerFechaFormatoUSA(ObtenerFechaHoy()));
         if(diff > 0 && prestamo.estado == 1)prestamo.estado = 2;
+        if(diff < 0 && prestamo.estado == 1)prestamo.dias_restantes = Math.abs(diff);
     });
     localStorage.setItem('prestamos', JSON.stringify(prestamos));
 }

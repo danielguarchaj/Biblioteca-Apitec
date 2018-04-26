@@ -271,6 +271,9 @@ function VerLibros(_inicio, _fin, _filtro) {
                 libros_html += '</tr>';
             } else return;
         });
+        $('#table_libros').html(libros_html);
+        Libros.length < saltos_tabla ? $('#lbl_rango_libros').html(`Del ${inicio_actual+1} al ${Libros.length} de ${Libros.length}`) : $('#lbl_rango_libros').html(`Del ${inicio_actual+1} al ${fin_actual} de ${Libros.length}`);
+        if (Libros.length == 0) $('#lbl_rango_libros').html('Del 0 al 0 de 0');
     } else {
         $.each(_filtro, function(index, libro) {
             if ((index >= _inicio) && (index < _fin)) {
@@ -286,11 +289,11 @@ function VerLibros(_inicio, _fin, _filtro) {
                 libros_html += '</tr>';
             } else return;
         });
+        $('#table_libros').html(libros_html);
+        _filtro.length < saltos_tabla ? $('#lbl_rango_libros').html(`Del ${inicio_actual+1} al ${_filtro.length} de ${_filtro.length}`) : $('#lbl_rango_libros').html(`Del ${inicio_actual+1} al ${fin_actual} de ${_filtro.length}`);
+        if (_filtro.length == 0) $('#lbl_rango_libros').html('Del 0 al 0 de 0');
     }
 
-    $('#table_libros').html(libros_html);
-    Libros.length < saltos_tabla ? $('#lbl_rango_libros').html(`Del ${inicio_actual+1} al ${Libros.length} de ${Libros.length}`) : $('#lbl_rango_libros').html(`Del ${inicio_actual+1} al ${fin_actual} de ${Libros.length}`);
-    if (Libros.length == 0) $('#lbl_rango_libros').html('Del 0 al 0 de 0');
 }
 
 /*
@@ -301,12 +304,11 @@ function VerLibros(_inicio, _fin, _filtro) {
 */
 function BuscarLibro(_busqueda) {
     var criterio_busqueda = parseInt($('#slc_buscar_libro_por').val());
-    var busqueda = $('#txt_buscar_libro').val();
     var filtro = [];
     switch (criterio_busqueda) {
         case 1:
             $.each(Libros, function(indice, libro) {
-                if (libro.titulo.indexOf(busqueda)>=0) filtro.push(libro);
+                if (libro.titulo.indexOf(_busqueda)>=0) filtro.push(libro);
             })
             VerLibros(inicio_actual, fin_actual, filtro);
             break;
@@ -314,27 +316,92 @@ function BuscarLibro(_busqueda) {
             $.each(Libros, function(indice, libro) {
                 var autor_datos = ObtenerInfoAutor(libro.autor_id);
                 var autor_nombre = autor_datos.nombres + ' ' + autor_datos.apellidos;
-                if (autor_nombre.indexOf(busqueda)>=0) filtro.push(libro);
+                if (autor_nombre.indexOf(_busqueda)>=0) filtro.push(libro);
             })
             VerLibros(inicio_actual, fin_actual, filtro);
             break;
         case 3:
             $.each(Libros, function(indice, libro) {
                 var tema_datos = ObtenerInfoTema(libro.tema_id);
-                if (tema_datos.tema.indexOf(busqueda)>=0) filtro.push(libro);
+                if (tema_datos.tema.indexOf(_busqueda)>=0) filtro.push(libro);
             })
             VerLibros(inicio_actual, fin_actual, filtro);
             break;
         case 4:
             $.each(Libros, function(indice, libro) {
-                if (libro.ubicacion.indexOf(busqueda)>=0) filtro.push(libro);
+                if (libro.ubicacion.indexOf(_busqueda)>=0) filtro.push(libro);
             })
             VerLibros(inicio_actual, fin_actual, filtro);
             break;
-            break;
-        default:
-
+        default:break;
     }
+}
+
+function BuscarPrestamo(_busqueda) {
+    if (localStorage.usuarios != null)usuarios=JSON.parse(localStorage.usuarios);
+    else return;
+    var prestamos;
+    if (localStorage.prestamos!=null)prestamos = JSON.parse(localStorage.prestamos);
+    else return;
+    var criterio_busqueda = parseInt($('#slc_buscar_prestamo_por').val());
+    var usuarios;
+    var filtro = [];
+    switch (criterio_busqueda) {
+        case 1:
+            $.each(prestamos, function(indice, prestamo) {
+                if (prestamo.token.indexOf(_busqueda)>=0) filtro.push(prestamo);
+            })
+            break;
+        case 2:
+            $.each(prestamos, function(indice, prestamo) {
+                var libro_datos = ObtenerDatosLibro(prestamo.libro_id, Libros);
+                if (libro_datos.titulo.indexOf(_busqueda)>=0) filtro.push(prestamo);
+            })
+            break;
+        case 3:
+            $.each(prestamos, function(indice, prestamo) {
+                var libro_datos = ObtenerDatosLibro(prestamo.libro_id, Libros);
+                var autor_datos = ObtenerInfoAutor(libro_datos.autor_id);
+                var autor_nombre = autor_datos.nombres + ' ' + autor_datos.apellidos;
+                if (autor_nombre.indexOf(_busqueda)>=0) filtro.push(prestamo);
+            })
+            break;
+        case 4:
+            $.each(prestamos, function(indice, prestamo) {
+                var libro_datos = ObtenerDatosLibro(prestamo.libro_id, Libros);
+                var tema_datos = ObtenerInfoTema(libro_datos.tema_id);
+                if (tema_datos.tema.indexOf(_busqueda)>=0) filtro.push(prestamo);
+            })
+            break;
+        case 5:
+            $.each(prestamos, function(indice, prestamo) {
+                if (prestamo.fecha_prestamo.indexOf(_busqueda)>=0) filtro.push(prestamo);
+            })
+            break;
+        case 6:
+            $.each(prestamos, function(indice, prestamo) {
+                if (prestamo.fecha_devolucion.indexOf(_busqueda)>=0) filtro.push(prestamo);
+            })
+            break;
+        case 7:
+            $.each(prestamos, function(indice, prestamo) {
+                var usuario_datos = ObtenerDatosUsuario(prestamo.usuario_id, usuarios);
+                var usuario_nombre = usuario_datos.nombres + ' ' + usuario_datos.apellidos;
+                if (usuario_nombre.indexOf(_busqueda)>=0) filtro.push(prestamo);
+            })
+        case 8:
+            $.each(prestamos, function(indice, prestamo) {
+                var estado;
+                if(prestamo.estado == 1)estado = prestamo.dias_restantes + ' dias';
+                else if(prestamo.estado == 2)estado = 'Mora';
+                else if(prestamo.estado == 3)estado = 'Devuelto';
+                else if(prestamo.estado == 4)estado = 'Devuelto con mora';
+                if (estado.indexOf(_busqueda)>=0) filtro.push(prestamo);
+            })
+            break;
+        default:break;
+    }
+    VerLibrosPrestados(inicio_actual_prestamos, fin_actual_prestamos, filtro);
 }
 
 var ascendente = false;
@@ -438,13 +505,12 @@ function OrdenarLibrosUbicacion(_elemento) {
     Funcion VerLibrosPrestados que recibe como parametros el inicio y el fin de la cantidad de elementos que se desea ver
     Muestra informacion de todos los libros que se encuentran actualmente en prestamos es decir en estado 1 o 2
 */
-function VerLibrosPrestados(_inicio, _fin) {
+function VerLibrosPrestados(_inicio, _fin, _filtro) {
     var autores;
     var temas;
     var prestamos;
     var prestamos_activos = [];
     var usuarios;
-    var usr_index;
     if (localStorage.autores != null) autores = JSON.parse(localStorage.autores);
     else return;
     if (localStorage.temas != null) temas = JSON.parse(localStorage.temas);
@@ -452,8 +518,6 @@ function VerLibrosPrestados(_inicio, _fin) {
     if (localStorage.prestamos != null) prestamos = JSON.parse(localStorage.prestamos);
     else return;
     if (localStorage.usuarios != null) usuarios = JSON.parse(localStorage.usuarios);
-    else return;
-    if (localStorage.user_logeado != null) usr_index = localStorage.user_logeado;
     else return;
     var prestamos_html = `<tr>
                             <th>#</th>
@@ -467,42 +531,83 @@ function VerLibrosPrestados(_inicio, _fin) {
                             <th>Estado</th>
                             <th>Operacion</th>
                         </tr>`;
-    $.each(prestamos, function(index, prestamo) {
-        var datos_libro = ObtenerDatosLibro(prestamo.libro_id, Libros);
-        var fecha_actual = ObtenerFechaFormatoUSA(ObtenerFechaHoy());
-        var fecha_devolucion = ObtenerFechaFormatoUSA(prestamo.fecha_devolucion);
-        var diferencia_dias = Math.abs(parseInt(ObtenerDiferenciaDias(fecha_devolucion, fecha_actual)));
-        var estado;
-        var boton = '';
-        if (prestamo.estado == 1) {
-            estado = '<td style="color: rgb(21, 219, 172);"> ' + diferencia_dias + ' dias</td>';
-        } else if (prestamo.estado == 2) {
-            estado = '<td style="color: red;">Mora</td>';
-        } else if (prestamo.estado == 3) {
-            estado = '<td style="color: green;">Devuelto</td>';
-        } else {
-            estado = '<td style="color: red;">Devuleto con mora</td>';
-        }
+    if (_filtro == undefined) {
+        $.each(prestamos, function(index, prestamo) {
+            var datos_libro = ObtenerDatosLibro(prestamo.libro_id, Libros);
+            var fecha_actual = ObtenerFechaFormatoUSA(ObtenerFechaHoy());
+            var fecha_devolucion = ObtenerFechaFormatoUSA(prestamo.fecha_devolucion);
+            var diferencia_dias = Math.abs(parseInt(ObtenerDiferenciaDias(fecha_devolucion, fecha_actual)));
+            var estado;
+            var boton = '';
+            if (prestamo.estado == 1) {
+                estado = '<td style="color: rgb(21, 219, 172);"> ' + diferencia_dias + ' dias</td>';
+            } else if (prestamo.estado == 2) {
+                estado = '<td style="color: red;">Mora</td>';
+            } else if (prestamo.estado == 3) {
+                estado = '<td style="color: green;">Devuelto</td>';
+            } else {
+                estado = '<td style="color: red;">Devuleto con mora</td>';
+            }
 
-        if ((index >= _inicio) && (index < _fin)) {
-            prestamos_html += '<tr>';
-            prestamos_html += '<td>' + prestamo.prestamo_id + '</td>';
-            prestamos_html += '<td class="prestamo_seleccionado">' + prestamo.token + '</td>';
-            prestamos_html += '<td>' + datos_libro.titulo + '</td>';
-            prestamos_html += '<td>' + ObtenerDatosAutor(datos_libro.autor_id, autores) + '</td>';
-            prestamos_html += '<td>' + ObtenerDatosTema(datos_libro.tema_id, temas) + '</td>';
-            prestamos_html += '<td>' + prestamo.fecha_prestamo + '</td>';
-            prestamos_html += '<td>' + prestamo.fecha_devolucion + '</td>';
-            prestamos_html += '<td>' + usuarios[usr_index].nombres + ' ' + usuarios[usr_index].apellidos + '</td>';
-            prestamos_html += estado;
-            if (prestamo.estado < 3) prestamos_html += '<td> <input type="button" class="button tabla_button" value="Devolver" onclick="ObtenerTokenDevolverLibroTabla(this)"> </td>';
-            else prestamos_html += '<td> <input type="button" class="" value="Devolver" onclick="ObtenerTokenDevolverLibroTabla(this)" disabled> </td>';
-            prestamos_html += '</tr>';
-        } else return;
-    });
-    $('#table_libros_prestados').html(prestamos_html);
-    prestamos.length < saltos_tabla_prestamos ? $('#lbl_rango_libros_prestados').html(`Del ${inicio_actual_prestamos+1} al ${prestamos.length} de ${prestamos.length}`) : $('#lbl_rango_libros_prestados').html(`Del ${inicio_actual_prestamos+1} al ${fin_actual_prestamos} de ${prestamos.length}`);
-    if (prestamos.length == 0) $('#lbl_rango_libros_prestados').html('Del 0 al 0 de 0');
+            if ((index >= _inicio) && (index < _fin)) {
+                var usuario_datos = ObtenerDatosUsuario(prestamo.usuario_id, usuarios);
+                prestamos_html += '<tr>';
+                prestamos_html += '<td>' + prestamo.prestamo_id + '</td>';
+                prestamos_html += '<td class="prestamo_seleccionado">' + prestamo.token + '</td>';
+                prestamos_html += '<td>' + datos_libro.titulo + '</td>';
+                prestamos_html += '<td>' + ObtenerDatosAutor(datos_libro.autor_id, autores) + '</td>';
+                prestamos_html += '<td>' + ObtenerDatosTema(datos_libro.tema_id, temas) + '</td>';
+                prestamos_html += '<td>' + prestamo.fecha_prestamo + '</td>';
+                prestamos_html += '<td>' + prestamo.fecha_devolucion + '</td>';
+                prestamos_html += '<td>' + usuario_datos.nombres + ' ' + usuario_datos.apellidos + '</td>';
+                prestamos_html += estado;
+                if (prestamo.estado < 3) prestamos_html += '<td> <input type="button" class="button tabla_button" value="Devolver" onclick="ObtenerTokenDevolverLibroTabla(this)"> </td>';
+                else prestamos_html += '<td> <input type="button" class="" value="Devolver" onclick="ObtenerTokenDevolverLibroTabla(this)" disabled> </td>';
+                prestamos_html += '</tr>';
+            } else return;
+        });
+        $('#table_libros_prestados').html(prestamos_html);
+        prestamos.length < saltos_tabla_prestamos ? $('#lbl_rango_libros_prestados').html(`Del ${inicio_actual_prestamos+1} al ${prestamos.length} de ${prestamos.length}`) : $('#lbl_rango_libros_prestados').html(`Del ${inicio_actual_prestamos+1} al ${fin_actual_prestamos} de ${prestamos.length}`);
+        if (prestamos.length == 0) $('#lbl_rango_libros_prestados').html('Del 0 al 0 de 0');
+    }else {
+        $.each(_filtro, function(index, prestamo) {
+            var datos_libro = ObtenerDatosLibro(prestamo.libro_id, Libros);
+            var fecha_actual = ObtenerFechaFormatoUSA(ObtenerFechaHoy());
+            var fecha_devolucion = ObtenerFechaFormatoUSA(prestamo.fecha_devolucion);
+            var diferencia_dias = Math.abs(parseInt(ObtenerDiferenciaDias(fecha_devolucion, fecha_actual)));
+            var estado;
+            var boton = '';
+            if (prestamo.estado == 1) {
+                estado = '<td style="color: rgb(21, 219, 172);"> ' + diferencia_dias + ' dias</td>';
+            } else if (prestamo.estado == 2) {
+                estado = '<td style="color: red;">Mora</td>';
+            } else if (prestamo.estado == 3) {
+                estado = '<td style="color: green;">Devuelto</td>';
+            } else {
+                estado = '<td style="color: red;">Devuleto con mora</td>';
+            }
+
+            if ((index >= _inicio) && (index < _fin)) {
+                var usuario_datos = ObtenerDatosUsuario(prestamo.usuario_id, usuarios);
+                prestamos_html += '<tr>';
+                prestamos_html += '<td>' + prestamo.prestamo_id + '</td>';
+                prestamos_html += '<td class="prestamo_seleccionado">' + prestamo.token + '</td>';
+                prestamos_html += '<td>' + datos_libro.titulo + '</td>';
+                prestamos_html += '<td>' + ObtenerDatosAutor(datos_libro.autor_id, autores) + '</td>';
+                prestamos_html += '<td>' + ObtenerDatosTema(datos_libro.tema_id, temas) + '</td>';
+                prestamos_html += '<td>' + prestamo.fecha_prestamo + '</td>';
+                prestamos_html += '<td>' + prestamo.fecha_devolucion + '</td>';
+                prestamos_html += '<td>' + usuario_datos.nombres + ' ' + usuario_datos.apellidos + '</td>';
+                prestamos_html += estado;
+                if (prestamo.estado < 3) prestamos_html += '<td> <input type="button" class="button tabla_button" value="Devolver" onclick="ObtenerTokenDevolverLibroTabla(this)"> </td>';
+                else prestamos_html += '<td> <input type="button" class="" value="Devolver" onclick="ObtenerTokenDevolverLibroTabla(this)" disabled> </td>';
+                prestamos_html += '</tr>';
+            } else return;
+        });
+        $('#table_libros_prestados').html(prestamos_html);
+        _filtro.length < saltos_tabla_prestamos ? $('#lbl_rango_libros_prestados').html(`Del ${inicio_actual_prestamos+1} al ${_filtro.length} de ${_filtro.length}`) : $('#lbl_rango_libros_prestados').html(`Del ${inicio_actual_prestamos+1} al ${fin_actual_prestamos} de ${_filtro.length}`);
+        if (_filtro.length == 0) $('#lbl_rango_libros_prestados').html('Del 0 al 0 de 0');
+    }
 }
 
 
@@ -893,5 +998,17 @@ $(function() {
     $('#txt_buscar_libro').on('keyup', function () {
         BuscarLibro(this.value);
     });
+
+    $('#btn_buscar_libro').click(function () {
+        BuscarLibro(this.value);
+    })
+
+    $('#txt_prestamo_buscar').on('keyup', function () {
+        BuscarPrestamo(this.value);
+    })
+
+    $('#btn_buscar_prestamos').click(function () {
+        BuscarPrestamo(this.value);
+    })
 
 });
