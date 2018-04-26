@@ -14,6 +14,8 @@ var fin_actual = inicio_actual + saltos_tabla; //variable que se calcula a parti
 var saltos_tabla_prestamos = 10;
 var inicio_actual_prestamos = 0;
 var fin_actual_prestamos = inicio_actual_prestamos + saltos_tabla_prestamos;
+var flecha_arriba = '↑';
+var flecha_abajo = '↓';
 //los saltos de tabla indica el fin acutal de la tabla
 
 CargarLibros(); //Se cargan libros de local storeage si existen
@@ -269,7 +271,7 @@ function VerLibros(_inicio, _fin, _filtro) {
                 libros_html += '</tr>';
             } else return;
         });
-    }else{
+    } else {
         $.each(_filtro, function(index, libro) {
             if ((index >= _inicio) && (index < _fin)) {
                 libros_html += '<tr>';
@@ -291,6 +293,49 @@ function VerLibros(_inicio, _fin, _filtro) {
     if (Libros.length == 0) $('#lbl_rango_libros').html('Del 0 al 0 de 0');
 }
 
+/*
+    Funcion buscar libro que recibe como parametro el texto que se esta buscando
+    La funcion se llama en el envento on change del input txt_buscar_libro
+    De esta forma se buscan coincidencias por cada vez que la cadena vaya cambiando
+    Para la busqueda se usa la funcion indexOf
+*/
+function BuscarLibro(_busqueda) {
+    var criterio_busqueda = parseInt($('#slc_buscar_libro_por').val());
+    var busqueda = $('#txt_buscar_libro').val();
+    var filtro = [];
+    switch (criterio_busqueda) {
+        case 1:
+            $.each(Libros, function(indice, libro) {
+                if (libro.titulo.indexOf(busqueda)>=0) filtro.push(libro);
+            })
+            VerLibros(inicio_actual, fin_actual, filtro);
+            break;
+        case 2:
+            $.each(Libros, function(indice, libro) {
+                var autor_datos = ObtenerInfoAutor(libro.autor_id);
+                var autor_nombre = autor_datos.nombres + ' ' + autor_datos.apellidos;
+                if (autor_nombre.indexOf(busqueda)>=0) filtro.push(libro);
+            })
+            VerLibros(inicio_actual, fin_actual, filtro);
+            break;
+        case 3:
+            $.each(Libros, function(indice, libro) {
+                var tema_datos = ObtenerInfoTema(libro.tema_id);
+                if (tema_datos.tema.indexOf(busqueda)>=0) filtro.push(libro);
+            })
+            VerLibros(inicio_actual, fin_actual, filtro);
+            break;
+        case 4:
+            $.each(Libros, function(indice, libro) {
+                if (libro.ubicacion.indexOf(busqueda)>=0) filtro.push(libro);
+            })
+            VerLibros(inicio_actual, fin_actual, filtro);
+            break;
+            break;
+        default:
+
+    }
+}
 
 var ascendente = false;
 
@@ -301,16 +346,18 @@ function OrdenarLibrosNombre(_elemento) {
     $(".td_libro_titulo").each(function() {
         libros_nombres.push($(this).text());
     });
-    if (ascendente==false){
-        libros_nombres.sort().reverse();
-        ascendente = true;
-    }else{
+    if (ascendente) {
         libros_nombres.sort();
+        $(_elemento).html('Titulo ' + flecha_arriba);
         ascendente = false;
+    } else {
+        libros_nombres.sort().reverse();
+        $(_elemento).html('Titulo ' + flecha_abajo);
+        ascendente = true;
     }
-    $.each(libros_nombres, function (index, nombre) {
-        $.each(Libros, function (indice, libro) {
-            if(libro.titulo == nombre)filtro.push(libro);
+    $.each(libros_nombres, function(index, nombre) {
+        $.each(Libros, function(indice, libro) {
+            if (libro.titulo == nombre) filtro.push(libro);
         })
     })
     VerLibros(inicio_actual, fin_actual, filtro);
@@ -318,24 +365,24 @@ function OrdenarLibrosNombre(_elemento) {
 
 function OrdenarLibrosAutor(_elemento) {
     var autores;
-    if(localStorage.autores!=null)autores=JSON.parse(localStorage.autores);
+    if (localStorage.autores != null) autores = JSON.parse(localStorage.autores);
     else return;
     var libros_autor = [];
     var filtro = [];
     $(".td_libro_autor").each(function() {
         libros_autor.push($(this).text());
     });
-    if (ascendente==false){
+    if (ascendente == false) {
         libros_autor.sort().reverse();
         ascendente = true;
-    }else{
+    } else {
         libros_autor.sort();
         ascendente = false;
     }
-    $.each(libros_autor, function (index, autor) {
-        $.each(Libros, function (indice, libro) {
+    $.each(libros_autor, function(index, autor) {
+        $.each(Libros, function(indice, libro) {
             var autor_nombre = ObtenerDatosAutor(libro.autor_id, autores);
-            if(autor_nombre == autor)filtro.push(libro);
+            if (autor_nombre == autor) filtro.push(libro);
         })
     })
     VerLibros(inicio_actual, fin_actual, filtro);
@@ -343,24 +390,24 @@ function OrdenarLibrosAutor(_elemento) {
 
 function OrdenarLibrosTema(_elemento) {
     var temas;
-    if(localStorage.temas!=null)temas=JSON.parse(localStorage.temas);
+    if (localStorage.temas != null) temas = JSON.parse(localStorage.temas);
     else return;
     var libros_temas = [];
     var filtro = [];
     $(".td_libro_tema").each(function() {
         libros_temas.push($(this).text());
     });
-    if (ascendente==false){
+    if (ascendente == false) {
         libros_temas.sort().reverse();
         ascendente = true;
-    }else{
+    } else {
         libros_temas.sort();
         ascendente = false;
     }
-    $.each(libros_temas, function (index, tema) {
-        $.each(Libros, function (indice, libro) {
+    $.each(libros_temas, function(index, tema) {
+        $.each(Libros, function(indice, libro) {
             var tema_nombre = ObtenerDatosTema(libro.tema_id, temas);
-            if(tema_nombre == tema)filtro.push(libro);
+            if (tema_nombre == tema) filtro.push(libro);
         })
     })
     VerLibros(inicio_actual, fin_actual, filtro);
@@ -372,16 +419,16 @@ function OrdenarLibrosUbicacion(_elemento) {
     $(".td_libro_ubicacion").each(function() {
         libros_ubicaciones.push($(this).text());
     });
-    if (ascendente==false){
+    if (ascendente == false) {
         libros_ubicaciones.sort().reverse();
         ascendente = true;
-    }else{
+    } else {
         libros_ubicaciones.sort();
         ascendente = false;
     }
-    $.each(libros_ubicaciones, function (index, ubicacion) {
-        $.each(Libros, function (indice, libro) {
-            if(libro.ubicacion == ubicacion)filtro.push(libro);
+    $.each(libros_ubicaciones, function(index, ubicacion) {
+        $.each(Libros, function(indice, libro) {
+            if (libro.ubicacion == ubicacion) filtro.push(libro);
         })
     })
     VerLibros(inicio_actual, fin_actual, filtro);
@@ -841,6 +888,10 @@ $(function() {
     $('#btn_aceptar_devolucion_libro').click(function() {
         DevolverLibro($('#txt_codigo_prestamo').val());
         alert('Libro devuelto');
+    });
+
+    $('#txt_buscar_libro').on('keyup', function () {
+        BuscarLibro(this.value);
     });
 
 });
