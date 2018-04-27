@@ -249,7 +249,7 @@ function VerLibros(_inicio, _fin, _filtro) {
     var Temas_retreived = JSON.parse(localStorage.getItem('temas'));
     var libros_html = `<tr>
                             <th>#</th>
-                            <th onclick="OrdenarLibrosNombre(this)" class="ordenable" id="th_libro_Titulo">Libro</th>
+                            <th onclick="OrdenarLibrosNombre(this)" class="ordenable" id="th_libro_Libro">Libro</th>
                             <th onclick="OrdenarLibrosAutor(this)" class="ordenable" id="th_libro_Autor">Autor</th>
                             <th onclick="OrdenarLibrosTema(this)" class="ordenable" id="th_libro_Tema">Tema</th>
                             <th onclick="OrdenarLibrosUbicacion(this)" class="ordenable" id="th_libro_Ubicacion">Ubicación</th>
@@ -405,11 +405,11 @@ function BuscarPrestamo(_busqueda) {
 }
 
 
-function MostrarFlecha(_campo) {
+function MostrarFlecha(_campo, _tabla) {
     if (ascendente) {
-        $('#th_libro_'+_campo).html(_campo+' '+ flecha_arriba);
+        $('#th_'+_tabla+'_'+_campo).html(_campo+' '+ flecha_arriba);
     }else {
-        $('#th_libro_'+_campo).html(_campo+' ' +flecha_abajo);
+        $('#th_'+_tabla+'_'+_campo).html(_campo+' ' +flecha_abajo);
     }
 }
 
@@ -434,7 +434,7 @@ function OrdenarLibrosNombre(_elemento) {
         })
     })
     VerLibros(inicio_actual, fin_actual, filtro);
-    MostrarFlecha('Titulo');
+    MostrarFlecha('Libro', 'libro');
 }
 
 function OrdenarLibrosAutor(_elemento) {
@@ -460,7 +460,7 @@ function OrdenarLibrosAutor(_elemento) {
         })
     })
     VerLibros(inicio_actual, fin_actual, filtro);
-    MostrarFlecha('Autor');
+    MostrarFlecha('Autor', 'libro');
 }
 
 function OrdenarLibrosTema(_elemento) {
@@ -486,7 +486,7 @@ function OrdenarLibrosTema(_elemento) {
         })
     })
     VerLibros(inicio_actual, fin_actual, filtro);
-    MostrarFlecha('Tema');
+    MostrarFlecha('Tema', 'libro');
 }
 
 function OrdenarLibrosUbicacion(_elemento) {
@@ -508,7 +508,7 @@ function OrdenarLibrosUbicacion(_elemento) {
         })
     })
     VerLibros(inicio_actual, fin_actual, filtro);
-    MostrarFlecha('Ubicacion');
+    MostrarFlecha('Ubicacion', 'libro');
 }
 
 /*
@@ -531,14 +531,14 @@ function VerLibrosPrestados(_inicio, _fin, _filtro) {
     else return;
     var prestamos_html = `<tr>
                             <th>#</th>
-                            <th>Codigo</th>
-                            <th>Libro</th>
-                            <th>Autor</th>
-                            <th>Tema</th>
-                            <th>Prestamo</th>
-                            <th>Devolucion</th>
-                            <th>Usuario</th>
-                            <th>Estado</th>
+                            <th onclick="OrdenarPrestamos('Codigo')" class="ordenable" id="th_prestamo_Codigo">Codigo</th>
+                            <th onclick="OrdenarPrestamos('Libro')" class="ordenable" id="th_prestamo_Libro">Libro</th>
+                            <th onclick="OrdenarPrestamos('Autor')" class="ordenable" id="th_prestamo_Autor">Autor</th>
+                            <th onclick="OrdenarPrestamos('Tema')" class="ordenable" id="th_prestamo_Tema">Tema</th>
+                            <th onclick="OrdenarPrestamos('Prestamo')" class="ordenable" id="th_prestamo_Prestamo">Prestamo</th>
+                            <th onclick="OrdenarPrestamos('Devolucion')" class="ordenable" id="th_prestamo_Devolucion">Devolucion</th>
+                            <th onclick="OrdenarPrestamos('Usuario')" class="ordenable" id="th_prestamo_Usuario">Usuario</th>
+                            <th onclick="OrdenarPrestamos('prestamo_Estado')" class="ordenable" id="th_prestamo_Estado">Estado</th>
                             <th>Operacion</th>
                         </tr>`;
     if (_filtro == undefined) {
@@ -550,29 +550,29 @@ function VerLibrosPrestados(_inicio, _fin, _filtro) {
             var estado;
             var boton = '';
             if (prestamo.estado == 1) {
-                estado = '<td style="color: rgb(21, 219, 172);"> ' + diferencia_dias + ' dias</td>';
+                estado = '<td style="color: rgb(21, 219, 172);" class="prestamo_estado"> ' + diferencia_dias + ' dias</td>';
             } else if (prestamo.estado == 2) {
-                estado = '<td style="color: red;">Mora</td>';
+                estado = '<td style="color: red;" class="prestamo_estado">Mora</td>';
             } else if (prestamo.estado == 3) {
-                estado = '<td style="color: green;">Devuelto</td>';
+                estado = '<td style="color: green;" class="prestamo_estado">Devuelto</td>';
             } else {
-                estado = '<td style="color: red;">Devuleto con mora</td>';
+                estado = '<td style="color: red;" class="prestamo_estado">Devuleto con mora</td>';
             }
 
             if ((index >= _inicio) && (index < _fin)) {
                 var usuario_datos = ObtenerDatosUsuario(prestamo.usuario_id, usuarios);
                 prestamos_html += '<tr>';
                 prestamos_html += '<td>' + prestamo.prestamo_id + '</td>';
-                prestamos_html += '<td class="prestamo_seleccionado">' + prestamo.token + '</td>';
-                prestamos_html += '<td>' + datos_libro.titulo + '</td>';
-                prestamos_html += '<td>' + ObtenerDatosAutor(datos_libro.autor_id, autores) + '</td>';
-                prestamos_html += '<td>' + ObtenerDatosTema(datos_libro.tema_id, temas) + '</td>';
-                prestamos_html += '<td>' + prestamo.fecha_prestamo + '</td>';
-                prestamos_html += '<td>' + prestamo.fecha_devolucion + '</td>';
-                prestamos_html += '<td>' + usuario_datos.nombres + ' ' + usuario_datos.apellidos + '</td>';
+                prestamos_html += '<td class="prestamo_seleccionado td_prestamo_Codigo">' + prestamo.token + '</td>';
+                prestamos_html += '<td class="td_prestamo_libro_Titulo">' + datos_libro.titulo + '</td>';
+                prestamos_html += '<td class="td_prestamo_libro_Autor">' + ObtenerDatosAutor(datos_libro.autor_id, autores) + '</td>';
+                prestamos_html += '<td class="td_prestamo_libro_Tema">' + ObtenerDatosTema(datos_libro.tema_id, temas) + '</td>';
+                prestamos_html += '<td class="td_prestamo_fecha_Prestamo">' + prestamo.fecha_prestamo + '</td>';
+                prestamos_html += '<td class="td_prestamo_fecha_Devolucion">' + prestamo.fecha_devolucion + '</td>';
+                prestamos_html += '<td class="td_prestamo_usuario_Nombre">' + usuario_datos.nombres + ' ' + usuario_datos.apellidos + '</td>';
                 prestamos_html += estado;
                 if (prestamo.estado < 3) prestamos_html += '<td> <input type="button" class="button tabla_button" value="Devolver" onclick="ObtenerTokenDevolverLibroTabla(this)"> </td>';
-                else prestamos_html += '<td> <input type="button" class="" value="Devolver" onclick="ObtenerTokenDevolverLibroTabla(this)" disabled> </td>';
+                else prestamos_html += '<td> <input type="button" class="" value="Devolver" disabled> </td>';
                 prestamos_html += '</tr>';
             } else return;
         });
@@ -588,29 +588,29 @@ function VerLibrosPrestados(_inicio, _fin, _filtro) {
             var estado;
             var boton = '';
             if (prestamo.estado == 1) {
-                estado = '<td style="color: rgb(21, 219, 172);"> ' + diferencia_dias + ' dias</td>';
+                estado = '<td style="color: rgb(21, 219, 172);" class="prestamo_estado"> ' + diferencia_dias + ' dias</td>';
             } else if (prestamo.estado == 2) {
-                estado = '<td style="color: red;">Mora</td>';
+                estado = '<td style="color: red;" class="prestamo_estado">Mora</td>';
             } else if (prestamo.estado == 3) {
-                estado = '<td style="color: green;">Devuelto</td>';
+                estado = '<td style="color: green;" class="prestamo_estado">Devuelto</td>';
             } else {
-                estado = '<td style="color: red;">Devuleto con mora</td>';
+                estado = '<td style="color: red;" class="prestamo_estado">Devuleto con mora</td>';
             }
 
             if ((index >= _inicio) && (index < _fin)) {
                 var usuario_datos = ObtenerDatosUsuario(prestamo.usuario_id, usuarios);
                 prestamos_html += '<tr>';
                 prestamos_html += '<td>' + prestamo.prestamo_id + '</td>';
-                prestamos_html += '<td class="prestamo_seleccionado">' + prestamo.token + '</td>';
-                prestamos_html += '<td>' + datos_libro.titulo + '</td>';
-                prestamos_html += '<td>' + ObtenerDatosAutor(datos_libro.autor_id, autores) + '</td>';
-                prestamos_html += '<td>' + ObtenerDatosTema(datos_libro.tema_id, temas) + '</td>';
-                prestamos_html += '<td>' + prestamo.fecha_prestamo + '</td>';
-                prestamos_html += '<td>' + prestamo.fecha_devolucion + '</td>';
-                prestamos_html += '<td>' + usuario_datos.nombres + ' ' + usuario_datos.apellidos + '</td>';
+                prestamos_html += '<td class="prestamo_seleccionado td_prestamo_Codigo">' + prestamo.token + '</td>';
+                prestamos_html += '<td class="td_prestamo_libro_Titulo">' + datos_libro.titulo + '</td>';
+                prestamos_html += '<td class="td_prestamo_libro_Autor">' + ObtenerDatosAutor(datos_libro.autor_id, autores) + '</td>';
+                prestamos_html += '<td class="td_prestamo_libro_Tema">' + ObtenerDatosTema(datos_libro.tema_id, temas) + '</td>';
+                prestamos_html += '<td class="td_prestamo_fecha_Prestamo">' + prestamo.fecha_prestamo + '</td>';
+                prestamos_html += '<td class="td_prestamo_fecha_Devolucion">' + prestamo.fecha_devolucion + '</td>';
+                prestamos_html += '<td class="td_prestamo_usuario_Nombre">' + usuario_datos.nombres + ' ' + usuario_datos.apellidos + '</td>';
                 prestamos_html += estado;
                 if (prestamo.estado < 3) prestamos_html += '<td> <input type="button" class="button tabla_button" value="Devolver" onclick="ObtenerTokenDevolverLibroTabla(this)"> </td>';
-                else prestamos_html += '<td> <input type="button" class="" value="Devolver" onclick="ObtenerTokenDevolverLibroTabla(this)" disabled> </td>';
+                else prestamos_html += '<td> <input type="button" value="Devolver" disabled> </td>';
                 prestamos_html += '</tr>';
             } else return;
         });
@@ -620,6 +620,35 @@ function VerLibrosPrestados(_inicio, _fin, _filtro) {
     }
 }
 
+function OrdenarPrestamos(_campo) {
+    var prestamos;
+    if(localStorage.prestamos != null)prestamos = JSON.parse(localStorage.prestamos);
+    else return;
+    var elementos_obtenidos = [];
+    var filtro = [];
+    switch (_campo) {
+        case 'Codigo':
+            $(".td_prestamo_Codigo").each(function() {
+                elementos_obtenidos.push($(this).text());
+            });
+            if (ascendente) {
+                elementos_obtenidos.sort();
+                ascendente = false;
+            } else {
+                elementos_obtenidos.sort().reverse();
+                ascendente = true;
+            }
+            $.each(elementos_obtenidos, function(index, elemento) {
+                $.each(prestamos, function(indice, prestamo) {
+                    if (prestamo.token == elemento) filtro.push(prestamo);
+                })
+            })
+            VerLibrosPrestados(inicio_actual_prestamos, fin_actual_prestamos, filtro);
+            MostrarFlecha('Codigo', 'prestamo');
+            break;
+        default:
+    }
+}
 
 /*
     Funcion que busca el elemento en arreglo de objetos por medio de un id que recibe como parametro
