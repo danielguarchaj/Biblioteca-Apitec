@@ -103,14 +103,14 @@ function ObtenerNacionalidadAutor(_id, _array) {
 */
 function VerAutores(_inicio, _fin) {
     var Paises_retreived = JSON.parse(localStorage.getItem('paises'));
-    var autores_html = `<tr>
-                            <th>#</th>
-                            <th>Nombres</th>
-                            <th>Apellidos</th>
-                            <th>Nacionalidad</th>
-                            <th>Fecha de ingreso</th>
+    var autores_html = `<thead><tr>
+                            <th class="ordenable">#</th>
+                            <th class="ordenable">Nombres</th>
+                            <th class="ordenable">Apellidos</th>
+                            <th class="ordenable">Nacionalidad</th>
+                            <th class="ordenable">Fecha de ingreso</th>
                             <th>Operaciones</th>
-                        </tr>`;
+                        </tr></thead><tbody>`;
     $.each(Autores, function(index, autor) {
         if ((index >= _inicio) && (index < _fin)) {
             autores_html += '<tr>';
@@ -124,6 +124,7 @@ function VerAutores(_inicio, _fin) {
             autores_html += '</td>';
         } else return;
     });
+    autores_html += '</tbody>';
     $('#table_autores').html(autores_html);
     if (Autores.length < saltos_tabla) {
         $('#lbl_rango_autores').html(`Del ${inicio_actual+1} al ${Autores.length} de ${Autores.length}`);
@@ -360,6 +361,8 @@ function ExisteAsociacionAutorConLibro(_id_autor) {
     funcion para llamar eventos de los elementos de html
 */
 $(function() {
+
+    $('#table_autores').tablesorter();
 
     /*
         evento click del boton salir que redirige al login

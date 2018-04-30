@@ -76,12 +76,12 @@ function AgregarNuevoTema(_tema) {
     Se insertan los elementos al html
 */
 function VerTemas(_inicio, _fin) {
-    var temas_html = `<tr>
-                            <th>#</th>
-                            <th>Tema</th>
-                            <th>Fecha de ingreso</th>
+    var temas_html = `<thead><tr>
+                            <th class="ordenable">#</th>
+                            <th class="ordenable">Tema</th>
+                            <th class="ordenable">Fecha de ingreso</th>
                             <th>Operaciones</th>
-                        </tr>`;
+                        </tr></thead><tbody>`;
     $.each(Temas, function(index, tema) {
         if ((index >= _inicio) && (index < _fin)) {
             temas_html += '<tr>';
@@ -93,6 +93,7 @@ function VerTemas(_inicio, _fin) {
             temas_html += '</td>';
         } else return;
     });
+    temas_html += '</tbody>';
     $('#table_temas').html(temas_html);
     Temas.length < saltos_tabla ? $('#lbl_rango_temas').html(`Del ${inicio_actual+1} al ${Temas.length} de ${Temas.length}`) : $('#lbl_rango_temas').html(`Del ${inicio_actual+1} al ${fin_actual} de ${Temas.length}`);
 }
@@ -250,6 +251,9 @@ function ExisteAsociacionTemaConLibro(_id_tema) {
     funcion para llamar eventos de los elementos de html
 */
 $(function() {
+
+    $('#table_temas').tablesorter();
+
     /*
         evento click del boton salir que redirige al login
         setea variable de sesion a 0
@@ -309,98 +313,6 @@ $(function() {
     */
     $('#btn_aceptar_editar_tema').on('click', function() { ///////////////////
         ValidarModificacionTema();
-    });
-
-    /*
-        evento click del boton anterior para paginacion de la tabla
-        llama  la funcion VerTemas con sus respectivos parametros si:
-            el inicio_actual es mayor o igual que saltos de tabla osea q existen elementos anteriores
-            actualiza las variables inicio y fin actual si se mueve
-            procede a llamar a la funcion VerTemas con los nuevos parametros
-    */
-    $('#btn_anterior_temas').on('click', function() {
-        if (inicio_actual >= saltos_tabla) {
-            inicio_actual -= saltos_tabla;
-            fin_actual -= saltos_tabla;
-            VerTemas(inicio_actual, fin_actual);
-        }
-    });
-
-    /*
-        evento click del boton siguiente para paginacion de la tabla
-        llama  la funcion VerTemas con sus respectivos parametros si:
-            el inicio_actual es menor que el tamano del arreglo es decir que existen elementos siguientes
-            actualiza las variables inicio y fin actual si se mueve
-            procede a llamar a la funcion VerTemas con los nuevos parametros
-    */
-    $('#btn_siguiente_temas').on('click', function() {
-        if (fin_actual < Temas.length) {
-            inicio_actual += saltos_tabla;
-            fin_actual += saltos_tabla;
-            VerTemas(inicio_actual, fin_actual);
-        }
-        //si se ha llegao al final de los elementos y se muestran los ultimos acutalmente
-        //se setea el rango de objetos visibles de la siguiente manera
-        if (inicio_actual + saltos_tabla > Temas.length) {
-            $('#lbl_rango_temas').html(`Del ${inicio_actual+1} al ${Temas.length} de ${Temas.length}`);
-        }
-    });
-
-    /*
-        evento click del boton ver 10 temas para paginacion de la tabla
-        modifica las variables de saltos_tabla a 10
-        regersa al inicio
-        llama  la funcion VerTemas con sus respectivos parametros si:
-            el inicio_actual es mayor o igual que saltos de tabla osea q existen elementos anteriores
-            actualiza las variables inicio y fin actual si se mueve
-            procede a llamar a la funcion VerTemas con los nuevos parametros
-    */
-    $('#btn_ver_10_temas').on('click', function() {
-        saltos_tabla = 10;
-        inicio_actual = 0;
-        fin_actual = inicio_actual + saltos_tabla;
-        VerTemas(inicio_actual, fin_actual);
-        if (inicio_actual + saltos_tabla > Temas.length) {
-            $('#lbl_rango_temas').html(`Del ${inicio_actual+1} al ${Temas.length} de ${Temas.length}`);
-        }
-    });
-
-    /*
-        evento click del boton ver 20 temas para paginacion de la tabla
-        modifica las variables de saltos_tabla a 20
-        regersa al inicio
-        llama  la funcion VerTemas con sus respectivos parametros si:
-            el inicio_actual es mayor o igual que saltos de tabla osea q existen elementos anteriores
-            actualiza las variables inicio y fin actual si se mueve
-            procede a llamar a la funcion VerTemas con los nuevos parametros
-    */
-    $('#btn_ver_20_temas').on('click', function() {
-        saltos_tabla = 20;
-        inicio_actual = 0;
-        fin_actual = inicio_actual + saltos_tabla;
-        VerTemas(inicio_actual, fin_actual);
-        if (inicio_actual + saltos_tabla > Temas.length) {
-            $('#lbl_rango_temas').html(`Del ${inicio_actual+1} al ${Temas.length} de ${Temas.length}`);
-        }
-    });
-
-    /*
-        evento click del boton ver 50 temas para paginacion de la tabla
-        modifica las variables de saltos_tabla a 50
-        regersa al inicio
-        llama  la funcion VerTemas con sus respectivos parametros si:
-            el inicio_actual es mayor o igual que saltos de tabla osea q existen elementos anteriores
-            actualiza las variables inicio y fin actual si se mueve
-            procede a llamar a la funcion VerTemas con los nuevos parametros
-    */
-    $('#btn_ver_50_temas').on('click', function() {
-        saltos_tabla = 50;
-        inicio_actual = 0;
-        fin_actual = inicio_actual + saltos_tabla;
-        VerTemas(inicio_actual, fin_actual);
-        if (inicio_actual + saltos_tabla > Temas.length) {
-            $('#lbl_rango_temas').html(`Del ${inicio_actual+1} al ${Temas.length} de ${Temas.length}`);
-        }
     });
 
     /*

@@ -37,15 +37,15 @@ function VerUsuarios(_inicio, _fin) {
     else return;
     if (localStorage.prestamos != null) prestamos = JSON.parse(localStorage.prestamos);
     else return;
-    var usuarios_html = `<tr>
-                            <th>#</th>
-                            <th>Nombres</th>
-                            <th>Apellidos</th>
-                            <th>Departamento</th>
-                            <th>Libros</th>
-                            <th>Estado</th>
+    var usuarios_html = `<thead><tr>
+                            <th class="ordenable">#</th>
+                            <th class="ordenable">Nombres</th>
+                            <th class="ordenable">Apellidos</th>
+                            <th class="ordenable">Departamento</th>
+                            <th class="ordenable">Libros</th>
+                            <th class="ordenable">Estado</th>
                             <th>Operaciones</th>
-                        </tr>`;
+                        </tr></thead><tbody>`;
     $.each(usuarios, function(index, usuario) {
         var estado;
         if (usuario.estado == 1) {
@@ -65,6 +65,7 @@ function VerUsuarios(_inicio, _fin) {
             usuarios_html += '</tr>';
         } else return;
     });
+    usuarios_html += '</tbody>';
     $('#table_usuarios').html(usuarios_html);
     usuarios.length < saltos_tabla_usuarios ? $('#lbl_rango_usuarios').html(`Del ${inicio_actual_usuarios+1} al ${usuarios.length} de ${usuarios.length}`) : $('#lbl_rango_usuarios').html(`Del ${inicio_actual_usuarios+1} al ${fin_actual_usuarios} de ${usuarios.length}`);
     if (usuarios.length == 0) $('#lbl_rango_usuarios').html('Del 0 al 0 de 0');

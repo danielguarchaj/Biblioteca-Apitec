@@ -6,6 +6,7 @@
     <title>Biblioteca</title>
     <link rel="stylesheet" href="css/index.css">
     <script src="jquery.min.js"></script>
+    <script src="jquery.tablesorter.js"></script>
 </head>
 
 <body>
@@ -38,15 +39,20 @@
             <div class="div_titulo_pantalla">
                 <h3>Listado general de autores</h3>
                 <input type="button" class="button" value="Agregar" id="btn_agregar_nuevo_autor">
-                <div class="div_cantidad_elementos">
-                    <label class="lbl_cantidad_elementos">Cantidad de elementos a mostrar</label>
-                    <input type="button" class="button" value="10" id="btn_ver_10_autores">
-                    <input type="button" class="button" value="20" id="btn_ver_20_autores">
-                    <input type="button" class="button" value="50" id="btn_ver_50_autores">
-                </div>
+            </div>
+            <div class="div_elementos_busqueda">
+                <label>Buscar por: </label>
+                <select id="slc_buscar_autor_por">
+                    <option value="1">Nombre</option>
+                    <option value="2">Autor</option>
+                    <option value="3">Tema</option>
+                    <option value="4">Ubicacion</option>
+                </select>
+                <input type="text" id="txt_buscar_libro">
+                <input type="button" class="button" value="Buscar" id="btn_buscar_libro">
             </div>
             <div class="div_tabla">
-                <table id="table_autores" class="tabla">
+                <table id="table_autores" class="tabla tablesorter">
                 </table>
             </div>
             <div class="div_botones_inferiores">

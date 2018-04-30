@@ -247,15 +247,15 @@ function ObtenerDatosLibro(_id, _array) {
 function VerLibros(_inicio, _fin, _filtro) {
     var Autores_retreived = JSON.parse(localStorage.getItem('autores'));
     var Temas_retreived = JSON.parse(localStorage.getItem('temas'));
-    var libros_html = `<tr>
+    var libros_html = `<thead><tr>
                             <th>#</th>
-                            <th onclick="OrdenarLibrosNombre(this)" class="ordenable" id="th_libro_Libro">Libro</th>
-                            <th onclick="OrdenarLibrosAutor(this)" class="ordenable" id="th_libro_Autor">Autor</th>
-                            <th onclick="OrdenarLibrosTema(this)" class="ordenable" id="th_libro_Tema">Tema</th>
-                            <th onclick="OrdenarLibrosUbicacion(this)" class="ordenable" id="th_libro_Ubicacion">Ubicación</th>
+                            <th class="ordenable" id="th_libro_Libro">Libro</th>
+                            <th class="ordenable" id="th_libro_Autor">Autor</th>
+                            <th class="ordenable" id="th_libro_Tema">Tema</th>
+                            <th class="ordenable" id="th_libro_Ubicacion">Ubicación</th>
                             <th>Disp</th>
                             <th>Operaciones</th>
-                        </tr>`;
+                        </tr></thead><tbody>`;
     if (_filtro == undefined) {
         $.each(Libros, function(index, libro) {
             if ((index >= _inicio) && (index < _fin)) {
@@ -271,6 +271,7 @@ function VerLibros(_inicio, _fin, _filtro) {
                 libros_html += '</tr>';
             } else return;
         });
+        libros_html += '</tbody>';
         $('#table_libros').html(libros_html);
         Libros.length < saltos_tabla ? $('#lbl_rango_libros').html(`Del ${inicio_actual+1} al ${Libros.length} de ${Libros.length}`) : $('#lbl_rango_libros').html(`Del ${inicio_actual+1} al ${fin_actual} de ${Libros.length}`);
         if (Libros.length == 0) $('#lbl_rango_libros').html('Del 0 al 0 de 0');
@@ -289,6 +290,7 @@ function VerLibros(_inicio, _fin, _filtro) {
                 libros_html += '</tr>';
             } else return;
         });
+        libros_html += '</tbody>';
         $('#table_libros').html(libros_html);
         _filtro.length < saltos_tabla ? $('#lbl_rango_libros').html(`Del ${inicio_actual+1} al ${_filtro.length} de ${_filtro.length}`) : $('#lbl_rango_libros').html(`Del ${inicio_actual+1} al ${fin_actual} de ${_filtro.length}`);
         if (_filtro.length == 0) $('#lbl_rango_libros').html('Del 0 al 0 de 0');
@@ -308,7 +310,7 @@ function BuscarLibro(_busqueda) {
     switch (criterio_busqueda) {
         case 1:
             $.each(Libros, function(indice, libro) {
-                if (libro.titulo.indexOf(_busqueda)>=0) filtro.push(libro);
+                if (libro.titulo.indexOf(_busqueda) >= 0) filtro.push(libro);
             })
             VerLibros(inicio_actual, fin_actual, filtro);
             break;
@@ -316,32 +318,33 @@ function BuscarLibro(_busqueda) {
             $.each(Libros, function(indice, libro) {
                 var autor_datos = ObtenerInfoAutor(libro.autor_id);
                 var autor_nombre = autor_datos.nombres + ' ' + autor_datos.apellidos;
-                if (autor_nombre.indexOf(_busqueda)>=0) filtro.push(libro);
+                if (autor_nombre.indexOf(_busqueda) >= 0) filtro.push(libro);
             })
             VerLibros(inicio_actual, fin_actual, filtro);
             break;
         case 3:
             $.each(Libros, function(indice, libro) {
                 var tema_datos = ObtenerInfoTema(libro.tema_id);
-                if (tema_datos.tema.indexOf(_busqueda)>=0) filtro.push(libro);
+                if (tema_datos.tema.indexOf(_busqueda) >= 0) filtro.push(libro);
             })
             VerLibros(inicio_actual, fin_actual, filtro);
             break;
         case 4:
             $.each(Libros, function(indice, libro) {
-                if (libro.ubicacion.indexOf(_busqueda)>=0) filtro.push(libro);
+                if (libro.ubicacion.indexOf(_busqueda) >= 0) filtro.push(libro);
             })
             VerLibros(inicio_actual, fin_actual, filtro);
             break;
-        default:break;
+        default:
+            break;
     }
 }
 
 function BuscarPrestamo(_busqueda) {
-    if (localStorage.usuarios != null)usuarios=JSON.parse(localStorage.usuarios);
+    if (localStorage.usuarios != null) usuarios = JSON.parse(localStorage.usuarios);
     else return;
     var prestamos;
-    if (localStorage.prestamos!=null)prestamos = JSON.parse(localStorage.prestamos);
+    if (localStorage.prestamos != null) prestamos = JSON.parse(localStorage.prestamos);
     else return;
     var criterio_busqueda = parseInt($('#slc_buscar_prestamo_por').val());
     var usuarios;
@@ -349,13 +352,13 @@ function BuscarPrestamo(_busqueda) {
     switch (criterio_busqueda) {
         case 1:
             $.each(prestamos, function(indice, prestamo) {
-                if (prestamo.token.indexOf(_busqueda)>=0) filtro.push(prestamo);
+                if (prestamo.token.indexOf(_busqueda) >= 0) filtro.push(prestamo);
             })
             break;
         case 2:
             $.each(prestamos, function(indice, prestamo) {
                 var libro_datos = ObtenerDatosLibro(prestamo.libro_id, Libros);
-                if (libro_datos.titulo.indexOf(_busqueda)>=0) filtro.push(prestamo);
+                if (libro_datos.titulo.indexOf(_busqueda) >= 0) filtro.push(prestamo);
             })
             break;
         case 3:
@@ -363,43 +366,44 @@ function BuscarPrestamo(_busqueda) {
                 var libro_datos = ObtenerDatosLibro(prestamo.libro_id, Libros);
                 var autor_datos = ObtenerInfoAutor(libro_datos.autor_id);
                 var autor_nombre = autor_datos.nombres + ' ' + autor_datos.apellidos;
-                if (autor_nombre.indexOf(_busqueda)>=0) filtro.push(prestamo);
+                if (autor_nombre.indexOf(_busqueda) >= 0) filtro.push(prestamo);
             })
             break;
         case 4:
             $.each(prestamos, function(indice, prestamo) {
                 var libro_datos = ObtenerDatosLibro(prestamo.libro_id, Libros);
                 var tema_datos = ObtenerInfoTema(libro_datos.tema_id);
-                if (tema_datos.tema.indexOf(_busqueda)>=0) filtro.push(prestamo);
+                if (tema_datos.tema.indexOf(_busqueda) >= 0) filtro.push(prestamo);
             })
             break;
         case 5:
             $.each(prestamos, function(indice, prestamo) {
-                if (prestamo.fecha_prestamo.indexOf(_busqueda)>=0) filtro.push(prestamo);
+                if (prestamo.fecha_prestamo.indexOf(_busqueda) >= 0) filtro.push(prestamo);
             })
             break;
         case 6:
             $.each(prestamos, function(indice, prestamo) {
-                if (prestamo.fecha_devolucion.indexOf(_busqueda)>=0) filtro.push(prestamo);
+                if (prestamo.fecha_devolucion.indexOf(_busqueda) >= 0) filtro.push(prestamo);
             })
             break;
         case 7:
             $.each(prestamos, function(indice, prestamo) {
                 var usuario_datos = ObtenerDatosUsuario(prestamo.usuario_id, usuarios);
                 var usuario_nombre = usuario_datos.nombres + ' ' + usuario_datos.apellidos;
-                if (usuario_nombre.indexOf(_busqueda)>=0) filtro.push(prestamo);
+                if (usuario_nombre.indexOf(_busqueda) >= 0) filtro.push(prestamo);
             })
         case 8:
             $.each(prestamos, function(indice, prestamo) {
                 var estado;
-                if(prestamo.estado == 1)estado = prestamo.dias_restantes + ' dias';
-                else if(prestamo.estado == 2)estado = 'Mora';
-                else if(prestamo.estado == 3)estado = 'Devuelto';
-                else if(prestamo.estado == 4)estado = 'Devuelto con mora';
-                if (estado.indexOf(_busqueda)>=0) filtro.push(prestamo);
+                if (prestamo.estado == 1) estado = prestamo.dias_restantes + ' dias';
+                else if (prestamo.estado == 2) estado = 'Mora';
+                else if (prestamo.estado == 3) estado = 'Devuelto';
+                else if (prestamo.estado == 4) estado = 'Devuelto con mora';
+                if (estado.indexOf(_busqueda) >= 0) filtro.push(prestamo);
             })
             break;
-        default:break;
+        default:
+            break;
     }
     VerLibrosPrestados(inicio_actual_prestamos, fin_actual_prestamos, filtro);
 }
@@ -407,109 +411,13 @@ function BuscarPrestamo(_busqueda) {
 
 function MostrarFlecha(_campo, _tabla) {
     if (ascendente) {
-        $('#th_'+_tabla+'_'+_campo).html(_campo+' '+ flecha_arriba);
-    }else {
-        $('#th_'+_tabla+'_'+_campo).html(_campo+' ' +flecha_abajo);
-    }
-}
-
-var ascendente = false;
-
-function OrdenarLibrosNombre(_elemento) {
-    var libros_nombres = [];
-    var filtro = [];
-    $(".td_libro_titulo").each(function() {
-        libros_nombres.push($(this).text());
-    });
-    if (ascendente) {
-        libros_nombres.sort();
-        ascendente = false;
+        $('#th_' + _tabla + '_' + _campo).html(_campo + ' ' + flecha_arriba);
     } else {
-        libros_nombres.sort().reverse();
-        ascendente = true;
+        $('#th_' + _tabla + '_' + _campo).html(_campo + ' ' + flecha_abajo);
     }
-    $.each(libros_nombres, function(index, nombre) {
-        $.each(Libros, function(indice, libro) {
-            if (libro.titulo == nombre) filtro.push(libro);
-        })
-    })
-    VerLibros(inicio_actual, fin_actual, filtro);
-    MostrarFlecha('Libro', 'libro');
 }
 
-function OrdenarLibrosAutor(_elemento) {
-    var autores;
-    if (localStorage.autores != null) autores = JSON.parse(localStorage.autores);
-    else return;
-    var libros_autor = [];
-    var filtro = [];
-    $(".td_libro_autor").each(function() {
-        libros_autor.push($(this).text());
-    });
-    if (ascendente == false) {
-        libros_autor.sort().reverse();
-        ascendente = true;
-    } else {
-        libros_autor.sort();
-        ascendente = false;
-    }
-    $.each(libros_autor, function(index, autor) {
-        $.each(Libros, function(indice, libro) {
-            var autor_nombre = ObtenerDatosAutor(libro.autor_id, autores);
-            if (autor_nombre == autor) filtro.push(libro);
-        })
-    })
-    VerLibros(inicio_actual, fin_actual, filtro);
-    MostrarFlecha('Autor', 'libro');
-}
 
-function OrdenarLibrosTema(_elemento) {
-    var temas;
-    if (localStorage.temas != null) temas = JSON.parse(localStorage.temas);
-    else return;
-    var libros_temas = [];
-    var filtro = [];
-    $(".td_libro_tema").each(function() {
-        libros_temas.push($(this).text());
-    });
-    if (ascendente == false) {
-        libros_temas.sort().reverse();
-        ascendente = true;
-    } else {
-        libros_temas.sort();
-        ascendente = false;
-    }
-    $.each(libros_temas, function(index, tema) {
-        $.each(Libros, function(indice, libro) {
-            var tema_nombre = ObtenerDatosTema(libro.tema_id, temas);
-            if (tema_nombre == tema) filtro.push(libro);
-        })
-    })
-    VerLibros(inicio_actual, fin_actual, filtro);
-    MostrarFlecha('Tema', 'libro');
-}
-
-function OrdenarLibrosUbicacion(_elemento) {
-    var libros_ubicaciones = [];
-    var filtro = [];
-    $(".td_libro_ubicacion").each(function() {
-        libros_ubicaciones.push($(this).text());
-    });
-    if (ascendente == false) {
-        libros_ubicaciones.sort().reverse();
-        ascendente = true;
-    } else {
-        libros_ubicaciones.sort();
-        ascendente = false;
-    }
-    $.each(libros_ubicaciones, function(index, ubicacion) {
-        $.each(Libros, function(indice, libro) {
-            if (libro.ubicacion == ubicacion) filtro.push(libro);
-        })
-    })
-    VerLibros(inicio_actual, fin_actual, filtro);
-    MostrarFlecha('Ubicacion', 'libro');
-}
 
 /*
     Funcion VerLibrosPrestados que recibe como parametros el inicio y el fin de la cantidad de elementos que se desea ver
@@ -529,18 +437,21 @@ function VerLibrosPrestados(_inicio, _fin, _filtro) {
     else return;
     if (localStorage.usuarios != null) usuarios = JSON.parse(localStorage.usuarios);
     else return;
-    var prestamos_html = `<tr>
+    var prestamos_html = `  <thead>
+                            <tr>
                             <th>#</th>
-                            <th onclick="OrdenarPrestamos('Codigo')" class="ordenable" id="th_prestamo_Codigo">Codigo</th>
-                            <th onclick="OrdenarPrestamos('Libro')" class="ordenable" id="th_prestamo_Libro">Libro</th>
-                            <th onclick="OrdenarPrestamos('Autor')" class="ordenable" id="th_prestamo_Autor">Autor</th>
-                            <th onclick="OrdenarPrestamos('Tema')" class="ordenable" id="th_prestamo_Tema">Tema</th>
-                            <th onclick="OrdenarPrestamos('Prestamo')" class="ordenable" id="th_prestamo_Prestamo">Prestamo</th>
-                            <th onclick="OrdenarPrestamos('Devolucion')" class="ordenable" id="th_prestamo_Devolucion">Devolucion</th>
-                            <th onclick="OrdenarPrestamos('Usuario')" class="ordenable" id="th_prestamo_Usuario">Usuario</th>
-                            <th onclick="OrdenarPrestamos('prestamo_Estado')" class="ordenable" id="th_prestamo_Estado">Estado</th>
+                            <th class="ordenable" id="th_prestamo_Codigo">Codigo</th>
+                            <th class="ordenable" id="th_prestamo_Libro">Libro</th>
+                            <th class="ordenable" id="th_prestamo_Autor">Autor</th>
+                            <th class="ordenable" id="th_prestamo_Tema">Tema</th>
+                            <th class="ordenable" id="th_prestamo_Prestamo">Prestamo</th>
+                            <th class="ordenable" id="th_prestamo_Devolucion">Devolucion</th>
+                            <th class="ordenable" id="th_prestamo_Usuario">Usuario</th>
+                            <th class="ordenable" id="th_prestamo_Estado">Estado</th>
                             <th>Operacion</th>
-                        </tr>`;
+                        </tr>
+                        </thead>
+                        <tbody>`;
     if (_filtro == undefined) {
         $.each(prestamos, function(index, prestamo) {
             var datos_libro = ObtenerDatosLibro(prestamo.libro_id, Libros);
@@ -576,10 +487,11 @@ function VerLibrosPrestados(_inicio, _fin, _filtro) {
                 prestamos_html += '</tr>';
             } else return;
         });
+        prestamos_html += '</tbody>';
         $('#table_libros_prestados').html(prestamos_html);
         prestamos.length < saltos_tabla_prestamos ? $('#lbl_rango_libros_prestados').html(`Del ${inicio_actual_prestamos+1} al ${prestamos.length} de ${prestamos.length}`) : $('#lbl_rango_libros_prestados').html(`Del ${inicio_actual_prestamos+1} al ${fin_actual_prestamos} de ${prestamos.length}`);
         if (prestamos.length == 0) $('#lbl_rango_libros_prestados').html('Del 0 al 0 de 0');
-    }else {
+    } else {
         $.each(_filtro, function(index, prestamo) {
             var datos_libro = ObtenerDatosLibro(prestamo.libro_id, Libros);
             var fecha_actual = ObtenerFechaFormatoUSA(ObtenerFechaHoy());
@@ -614,39 +526,10 @@ function VerLibrosPrestados(_inicio, _fin, _filtro) {
                 prestamos_html += '</tr>';
             } else return;
         });
+        prestamos_html += '</tbody>';
         $('#table_libros_prestados').html(prestamos_html);
         _filtro.length < saltos_tabla_prestamos ? $('#lbl_rango_libros_prestados').html(`Del ${inicio_actual_prestamos+1} al ${_filtro.length} de ${_filtro.length}`) : $('#lbl_rango_libros_prestados').html(`Del ${inicio_actual_prestamos+1} al ${fin_actual_prestamos} de ${_filtro.length}`);
         if (_filtro.length == 0) $('#lbl_rango_libros_prestados').html('Del 0 al 0 de 0');
-    }
-}
-
-function OrdenarPrestamos(_campo) {
-    var prestamos;
-    if(localStorage.prestamos != null)prestamos = JSON.parse(localStorage.prestamos);
-    else return;
-    var elementos_obtenidos = [];
-    var filtro = [];
-    switch (_campo) {
-        case 'Codigo':
-            $(".td_prestamo_Codigo").each(function() {
-                elementos_obtenidos.push($(this).text());
-            });
-            if (ascendente) {
-                elementos_obtenidos.sort();
-                ascendente = false;
-            } else {
-                elementos_obtenidos.sort().reverse();
-                ascendente = true;
-            }
-            $.each(elementos_obtenidos, function(index, elemento) {
-                $.each(prestamos, function(indice, prestamo) {
-                    if (prestamo.token == elemento) filtro.push(prestamo);
-                })
-            })
-            VerLibrosPrestados(inicio_actual_prestamos, fin_actual_prestamos, filtro);
-            MostrarFlecha('Codigo', 'prestamo');
-            break;
-        default:
     }
 }
 
@@ -872,6 +755,11 @@ function ObtenerTokenDevolverLibroTabla(_elemento) {
 
 $(function() {
 
+
+    $("#table_libros_prestados").tablesorter();
+    $("#table_libros").tablesorter();
+
+
     /*
         evento click del boton salir que redirige al login
         setea variable de sesion a 0
@@ -1034,19 +922,19 @@ $(function() {
         alert('Libro devuelto');
     });
 
-    $('#txt_buscar_libro').on('keyup', function () {
+    $('#txt_buscar_libro').on('keyup', function() {
         BuscarLibro(this.value);
     });
 
-    $('#btn_buscar_libro').click(function () {
+    $('#btn_buscar_libro').click(function() {
         BuscarLibro(this.value);
     })
 
-    $('#txt_prestamo_buscar').on('keyup', function () {
+    $('#txt_prestamo_buscar').on('keyup', function() {
         BuscarPrestamo(this.value);
     })
 
-    $('#btn_buscar_prestamos').click(function () {
+    $('#btn_buscar_prestamos').click(function() {
         BuscarPrestamo(this.value);
     })
 
