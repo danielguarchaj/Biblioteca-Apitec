@@ -10,7 +10,7 @@
 
 <body>
     <script type="text/javascript">
-        if (localStorage.getItem('sesion_user') != 0) window.location.href = 'usuarios_libros.html';
+        if (localStorage.getItem('sesion_user') != null) window.location.href = 'usuarios_libros.html';
         localStorage.setItem('user_logeado', null);
     </script>
     <div class="div_contenedor_principal" id="div_principal_login">
