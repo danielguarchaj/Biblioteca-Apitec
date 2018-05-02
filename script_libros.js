@@ -341,13 +341,13 @@ function BuscarLibro(_busqueda) {
 }
 
 function BuscarPrestamo(_busqueda) {
+    var usuarios;
     if (localStorage.usuarios != null) usuarios = JSON.parse(localStorage.usuarios);
     else return;
     var prestamos;
     if (localStorage.prestamos != null) prestamos = JSON.parse(localStorage.prestamos);
     else return;
     var criterio_busqueda = parseInt($('#slc_buscar_prestamo_por').val());
-    var usuarios;
     var filtro = [];
     switch (criterio_busqueda) {
         case 1:
