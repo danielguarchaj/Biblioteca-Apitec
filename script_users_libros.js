@@ -87,15 +87,15 @@ function ObtenerInfoTema(_id) {
 function VerLibros(_inicio, _fin) {
     var Autores_retreived = JSON.parse(localStorage.getItem('autores'));
     var Temas_retreived = JSON.parse(localStorage.getItem('temas'));
-    var libros_html = `<tr>
-                            <th>#</th>
-                            <th>Libro</th>
-                            <th>Autor</th>
-                            <th>Tema</th>
-                            <th>Ubicación</th>
-                            <th>Disp</th>
+    var libros_html = `<thead><tr>
+                            <th class="ordenable">#</th>
+                            <th class="ordenable">Libro</th>
+                            <th class="ordenable">Autor</th>
+                            <th class="ordenable">Tema</th>
+                            <th class="ordenable">Ubicación</th>
+                            <th class="ordenable">Disp</th>
                             <th>Operaciones</th>
-                        </tr>`;
+                        </tr></thead><tbody>`;
     $.each(Libros, function(index, libro) {
         var boton = '<input type="button" class="button tabla_button" value="Prestar" onclick="ObtenerIdPrestarLibro(this)">';
         if (libro.disponibles == 0) boton = 'No Disponible';
@@ -113,6 +113,7 @@ function VerLibros(_inicio, _fin) {
             libros_html += '</tr>';
         } else return;
     });
+    libros_html += '</tbody>';
     $('#table_libros').html(libros_html);
     Libros.length < saltos_tabla ? $('#lbl_rango_libros').html(`Del ${inicio_actual+1} al ${Libros.length} de ${Libros.length}`) : $('#lbl_rango_libros').html(`Del ${inicio_actual+1} al ${fin_actual} de ${Libros.length}`);
     if (Libros.length == 0) $('#lbl_rango_libros').html('Del 0 al 0 de 0');
@@ -325,6 +326,8 @@ function VerificarPrestamo() {
 }
 
 $(function() {
+
+    $('#table_libros').tablesorter();
 
     /*
         evento click del boton anterior para paginacion de la tabla

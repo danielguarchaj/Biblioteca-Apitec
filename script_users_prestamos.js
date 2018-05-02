@@ -59,16 +59,16 @@ function VerLibrosPrestados() {
     var libro_info;
     var nombre_autor;
     var nombre_tema;
-    var libros_prestados_html = `<tr>
-                            <th>#</th>
-                            <th>Codigo</th>
-                            <th>Libro</th>
-                            <th>Autor</th>
-                            <th>Tema</th>
-                            <th>Prestamo</th>
-                            <th>Devolucion</th>
-                            <th>Estado</th>
-                        </tr>`;
+    var libros_prestados_html = `<thead><tr>
+                            <th class="ordenable">#</th>
+                            <th class="ordenable">Codigo</th>
+                            <th class="ordenable">Libro</th>
+                            <th class="ordenable">Autor</th>
+                            <th class="ordenable">Tema</th>
+                            <th class="ordenable">Prestamo</th>
+                            <th class="ordenable">Devolucion</th>
+                            <th class="ordenable">Estado</th>
+                        </tr></thead><tbody>`;
     $.each(Prestamos_retreived, function(index, prestamo) {
         if (usuarios[usuario_index].id == prestamo.usuario_id && (prestamo.estado == 1 || prestamo.estado == 2)) {
             libro_info = ObtenerDatosLibro(prestamo.libro_id);
@@ -86,6 +86,7 @@ function VerLibrosPrestados() {
             libros_prestados_html += '</tr>';
         }else return false;
     });
+    libros_prestados_html += '</tbody>';
     $('#table_mis_prestamos').html(libros_prestados_html);
 }
 
@@ -107,16 +108,16 @@ function VerHistorialPrestamos(_inicio, _fin, _filtro) {
     var libro_info;
     var nombre_autor;
     var nombre_tema;
-    var libros_devueltos_html = `<tr>
-                                <th>#</th>
-                                <th>Codigo</th>
-                                <th>Libro</th>
-                                <th>Autor</th>
-                                <th>Tema</th>
-                                <th>Prestamo</th>
-                                <th>Devolucion</th>
-                                <th>Estado</th>
-                            </tr>`;
+    var libros_devueltos_html = `<thead><tr>
+                                <th class="ordenable">#</th>
+                                <th class="ordenable">Codigo</th>
+                                <th class="ordenable">Libro</th>
+                                <th class="ordenable">Autor</th>
+                                <th class="ordenable">Tema</th>
+                                <th class="ordenable">Prestamo</th>
+                                <th class="ordenable">Devolucion</th>
+                                <th class="ordenable">Estado</th>
+                            </tr></thead><tbody>`;
     if (_filtro == undefined) {
         $.each(Prestamos_retreived, function(index, prestamo) {
             if ((index >= _inicio) && (index < _fin)) {
@@ -138,6 +139,7 @@ function VerHistorialPrestamos(_inicio, _fin, _filtro) {
                 }
             }else return false;
         });
+        libros_devueltos_html += '</tbody>';
         $('#table_historial').html(libros_devueltos_html);
         cont_historial < saltos_tabla_historial ? $('#lbl_rango_libros_historial').html(`Del ${inicio_actual_historial+1} al ${cont_historial} de ${cont_historial}`) : $('#lbl_rango_libros_historial').html(`Del ${inicio_actual_historial+1} al ${fin_actual_historial} de ${cont_historial}`);
         if (cont_historial == 0) $('#lbl_rango_libros_historial').html('Del 0 al 0 de 0');
@@ -253,4 +255,9 @@ $('#btn_anterior_libros_historial').on('click', function() {
 
 $('#txt_buscar_prestamo_hist').on('keyup', function () {
     BuscarPrestamoHistorial(this.value);
+})
+
+$(function () {
+    $("#table_mis_prestamos").tablesorter();
+    $("#table_historial").tablesorter();
 })
