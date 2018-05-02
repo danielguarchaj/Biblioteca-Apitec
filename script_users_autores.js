@@ -261,5 +261,6 @@ $(function () {
     })
 
     $('#table_autores').tablesorter();
+    $('#table_libros_autor').tablesorter();
 
 })
