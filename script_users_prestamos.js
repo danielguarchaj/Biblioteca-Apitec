@@ -84,7 +84,7 @@ function VerLibrosPrestados() {
             libros_prestados_html += '<td>' + prestamo.fecha_devolucion + '</td>';
             libros_prestados_html += ObtenerEstadoPrestamo(prestamo.estado);
             libros_prestados_html += '</tr>';
-        }else return false;
+        };
     });
     libros_prestados_html += '</tbody>';
     $('#table_mis_prestamos').html(libros_prestados_html);
