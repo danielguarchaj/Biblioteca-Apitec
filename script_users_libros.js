@@ -141,7 +141,45 @@ function VerLibros(_inicio, _fin, _filtro) {
         _filtro.length < saltos_tabla ? $('#lbl_rango_libros').html(`Del ${inicio_actual+1} al ${_filtro.length} de ${_filtro.length}`) : $('#lbl_rango_libros').html(`Del ${inicio_actual+1} al ${fin_actual} de ${_filtro.length}`);
         if (_filtro.length == 0) $('#lbl_rango_libros').html('Del 0 al 0 de 0');
     }
+}
 
+/*
+    Funcion buscar libro que recibe como parametro el texto que se esta buscando
+    La funcion se llama en el envento on change del input txt_buscar_libro
+    De esta forma se buscan coincidencias por cada vez que la cadena vaya cambiando
+    Para la busqueda se usa la funcion indexOf
+*/
+function BuscarLibro(_busqueda) {
+    var criterio_busqueda = parseInt($('#slc_buscar_libro_por').val());
+    var filtro = [];
+    switch (criterio_busqueda) {
+        case 1:
+            $.each(Libros, function(indice, libro) {
+                if (libro.titulo.indexOf(_busqueda) >= 0) filtro.push(libro);
+            })
+            break;
+        case 2:
+            $.each(Libros, function(indice, libro) {
+                var autor_datos = ObtenerInfoAutor(libro.autor_id);
+                var autor_nombre = autor_datos.nombres + ' ' + autor_datos.apellidos;
+                if (autor_nombre.indexOf(_busqueda) >= 0) filtro.push(libro);
+            })
+            break;
+        case 3:
+            $.each(Libros, function(indice, libro) {
+                var tema_datos = ObtenerInfoTema(libro.tema_id);
+                if (tema_datos.tema.indexOf(_busqueda) >= 0) filtro.push(libro);
+            })
+            break;
+        case 4:
+            $.each(Libros, function(indice, libro) {
+                if (libro.ubicacion.indexOf(_busqueda) >= 0) filtro.push(libro);
+            })
+            break;
+        default:
+            break;
+    }
+    VerLibros(inicio_actual, fin_actual, filtro);
 }
 
 /*
@@ -386,5 +424,9 @@ $(function() {
             $('#lbl_rango_libros').html(`Del ${inicio_actual+1} al ${Libros.length} de ${Libros.length}`);
         }
     });
+
+    $('#txt_buscar_libro').on('keyup', function () {
+        BuscarLibro(this.value);
+    })
 
 });
