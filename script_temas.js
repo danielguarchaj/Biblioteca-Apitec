@@ -388,4 +388,39 @@ $(function() {
         BuscarTema($('#txt_buscar_tema').val());
     })
 
+    /*
+        evento click del boton anterior para paginacion de la tabla
+        llama  la funcion VerAutores con sus respectivos parametros si:
+            el inicio_actual es mayor o igual que saltos de tabla osea q existen elementos anteriores
+            actualiza las variables inicio y fin actual si se mueve
+            procede a llamar a la funcion VerAutores con los nuevos parametros
+    */
+    $('#btn_anterior_temas').on('click', function() {
+        if (inicio_actual >= saltos_tabla) {
+            inicio_actual -= saltos_tabla;
+            fin_actual -= saltos_tabla;
+            VerTemas(inicio_actual, fin_actual);
+        }
+    });
+
+    /*
+        evento click del boton siguiente para paginacion de la tabla
+        llama  la funcion VerAutores con sus respectivos parametros si:
+            el inicio_actual es menor que el tamano del arreglo es decir que existen elementos siguientes
+            actualiza las variables inicio y fin actual si se mueve
+            procede a llamar a la funcion VerAutores con los nuevos parametros
+    */
+    $('#btn_siguiente_temas').on('click', function() {
+        if (fin_actual < Temas.length) {
+            inicio_actual += saltos_tabla;
+            fin_actual += saltos_tabla;
+            VerTemas(inicio_actual, fin_actual);
+        }
+        //si se ha llegao al final de los elementos y se muestran los ultimos acutalmente
+        //se setea el rango de objetos visibles de la siguiente manera
+        if (inicio_actual + saltos_tabla > Temas.length) {
+            $('#lbl_rango_temas').html(`Del ${inicio_actual+1} al ${Temas.length} de ${Temas.length}`);
+        }
+    });
+
 });

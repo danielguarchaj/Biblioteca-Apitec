@@ -8,7 +8,7 @@ var libro = { //Protoripo libro que sirve para crear nuevos autores
     disponibles: 0,
     fecha_ingreso: ''
 };
-var saltos_tabla = 5; //variable para determinar cuantos elementos se muestran en la tabla
+var saltos_tabla = 3; //variable para determinar cuantos elementos se muestran en la tabla
 var inicio_actual = 0; //variable para saber en que elemento se encuentra el inicio de la tabla actualmente
 var fin_actual = inicio_actual + saltos_tabla; //variable que se calcula a partir de la suma del inicio actual y
 var saltos_tabla_prestamos = 10;

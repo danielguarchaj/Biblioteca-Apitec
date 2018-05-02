@@ -2,7 +2,8 @@ var inicio_actual_autores = 0;
 var saltos_tabla_autores = 10;
 var fin_actual_autores = inicio_actual_autores + saltos_tabla_autores;
 
-var Libros = JSON.parse(localStorage.libros);
+var Libros;
+if(localStorage.libros != null) Libros = JSON.parse(localStorage.libros);
 
 function ObtenerNacionalidadAutor(_id_pais) {
     var Paises_retreived = JSON.parse(localStorage.getItem('paises'));
@@ -151,8 +152,9 @@ function BuscarLibroAutor(_busqueda) {
     Se insertan los elementos al html
 */
 function VerAutores(_inicio, _fin, _filtro) {
-    var Autores = JSON.parse(localStorage.autores);
-    if (Autores == 'null') return;
+    var Autores;
+    if (localStorage.autores != null) Autores = JSON.parse(localStorage.autores);
+    else return;
     var autores_html = `<thead><tr>
                             <th class="ordenable">#</th>
                             <th class="ordenable">Nombres</th>

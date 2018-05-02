@@ -2,7 +2,8 @@ var inicio_actual_temas = 0;
 var saltos_tabla_temas = 10;
 var fin_actual_temas = inicio_actual_temas + saltos_tabla_temas;
 
-var Libros = JSON.parse(localStorage.libros);
+var Libros;
+if (localStorage.libros != null) Libros = JSON.parse(localStorage.libros);
 
 function ObtenerCantidadLibrosTema(_tema_id) {
     var Libros = JSON.parse(localStorage.libros);
@@ -142,8 +143,9 @@ function BuscarLibroTema(_busqueda) {
     Se insertan los elementos al html
 */
 function VerTemas(_inicio, _fin, _filtro) {
-    var Temas = JSON.parse(localStorage.temas);
-    if (Temas == 'null') return;
+    var Temas;
+    if (localStorage.temas != null) Temas = JSON.parse(localStorage.temas);
+    else return;
     var temas_html = `<thead><tr>
                             <th class="ordenable">#</th>
                             <th class="ordenable">Tema</th>

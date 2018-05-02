@@ -2,10 +2,15 @@ var usuarios = JSON.parse(localStorage.usuarios);
 var usr_index = localStorage.user_logeado;
 
 function MostrarEstadoPrestamos() {
-    var prestamos = JSON.parse(localStorage.prestamos);
-    if (prestamos=='null')return;
     var prestamos_activos = 0;
     var prestamos_mora = 0;
+    var prestamos;
+    if (localStorage.prestamos != null) prestamos = JSON.parse(localStorage.prestamos);
+    else {
+        $('#td_prestamos_mora').html(prestamos_mora);
+        $('#td_prestados_actualmente').html(prestamos_activos);
+        return;
+    }
     var usr_id = usuarios[usr_index].id;
     $.each(prestamos, function (index, prestamo) {
         if(prestamo.usuario_id == usr_id){
