@@ -173,3 +173,22 @@ $('#btn_usuarios_siguiente').on('click', function() {
         $('#lbl_rango_usuarios').html(`Del ${inicio_actual_usuarios+1} al ${usuarios.length} de ${usuarios.length}`);
     }
 });
+
+$('.btn_autores').click(function() {
+    window.location.href = 'autores.html';
+});
+
+$('.btn_temas').click(function() {
+    window.location.href = 'temas.html';
+});
+
+$('.btn_libros').click(function() {
+    window.location.href = 'libros.html';
+});
+
+$('.btn_usuarios').click(function() {
+    window.location.href = 'usuarios.html';
+});
+$('.btn_prestamos').click(function() {
+    window.location.href = 'libros_prestamos.html';
+});
