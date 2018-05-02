@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+    <meta charset="utf-8">
+    <title>Biblioteca</title>
+    <link rel="stylesheet" href="css/index.css">
+    <script src="jquery.min.js"></script>
+    <script src="jquery.tablesorter.js"></script>
+</head>
+
+<body>
+    <script type="text/javascript">
+        if (localStorage.getItem('sesion_user') != '1' || localStorage.getItem('user_logeado')==null) window.location.href = 'usuarios_login.html';
+        localStorage.setItem('prestar_libro', null);
+    </script>
+    <div class="div_contenedor_principal">
+        <div class="div_encabezado">
+            <h3>Libros</h3>
+        </div>
+        <div class="div_navegacion">
+            <div class="div_titulo_pagina">
+                <h3>Biblioteca</h3>
+            </div>
+            <div class="div_botones_navegacion">
+                <input type="button" class="button btn_libros" value="Libros">
+                <input type="button" class="button btn_autores btn_pagina_actual" value="Autores">
+                <input type="button" class="button btn_temas" value="Temas">
+                <input type="button" class="button btn_prestamos" value="Prestamos">
+                <input type="button" class="button btn_perfil" value="Perfil">
+                <input type="button" class="button btn_salir" value="Salir">
+            </div>
+        </div>
+        <div class="div_ver_libros">
+            <div class="div_titulo_pantalla">
+                <h3 id="h3_titulo_pantalla"></h3>
+                <div class="div_elementos_busqueda">
+                    <label>Buscar por: </label>
+                    <select id="slc_buscar_libro_autor_por">
+                        <option value="1">Nombre</option>
+                        <option value="2">Tema</option>
+                        <option value="3">Ubicacion</option>
+                    </select>
+                    <input type="text" id="txt_buscar_libro_autor">
+                    <input type="button" class="button" value="Buscar" id="btn_buscar_libro_autor">
+                </div>
+            </div>
+            <div class="div_tabla">
+                <table id="table_libros_autor" class="tabla tablesorter"></table>
+            </div>
+            <div class="div_botones_inferiores">
+                <input type="button" class="button" value="Anterior" id="btn_anterior_libros_autor">
+                <label id="lbl_rango_libros_autor"></label>
+                <input type="button" class="button" value="Siguiente" id="btn_siguiente_libros_autor">
+            </div>
+        </div>
+    </div>
+    <script src="script_users_libros.js"></script>
+    <script src="script_users_autores.js"></script>
+    <script src="script_users_navegacion_botones.js"></script>
+</body>
+</html>

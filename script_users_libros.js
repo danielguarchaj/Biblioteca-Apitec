@@ -97,6 +97,7 @@ function VerLibros(_inicio, _fin, _filtro) {
                             <th>Operaciones</th>
                         </tr></thead><tbody>`;
     if (_filtro == undefined) {
+        var autor_id = localStorage.index_ver_autor;
         $.each(Libros, function(index, libro) {
             var boton = '<input type="button" class="button tabla_button" value="Prestar" onclick="ObtenerIdPrestarLibro(this)">';
             if (libro.disponibles == 0) boton = 'No Disponible';
