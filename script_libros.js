@@ -699,11 +699,14 @@ function DevolverLibro(_token) {
                 usr_index = ObtenerUsuarioIndex(prestamos[index].usuario_id, usuarios);
                 usuarios[usr_index].estado = 1;
             }
+            var libro_index = ObtenerLibroIndex(prestamos[index].libro_id);
+            Libros[libro_index].disponibles++;
             return false;
         }
     });
     localStorage.setItem('usuarios', JSON.stringify(usuarios));
     localStorage.setItem('prestamos', JSON.stringify(prestamos));
+    localStorage.setItem('libros', JSON.stringify(Libros));
 }
 
 
@@ -920,6 +923,7 @@ $(function() {
     $('#btn_aceptar_devolucion_libro').click(function() {
         DevolverLibro($('#txt_codigo_prestamo').val());
         alert('Libro devuelto');
+        window.location.href = 'libros_prestamos.html';
     });
 
     $('#txt_buscar_libro').on('keyup', function() {
