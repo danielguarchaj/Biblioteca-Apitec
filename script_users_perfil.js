@@ -1,6 +1,22 @@
 var usuarios = JSON.parse(localStorage.usuarios);
 var usr_index = localStorage.user_logeado;
 
+function MostrarEstadoPrestamos() {
+    var prestamos = JSON.parse(localStorage.prestamos);
+    if (prestamos=='null')return;
+    var prestamos_activos = 0;
+    var prestamos_mora = 0;
+    var usr_id = usuarios[usr_index].id;
+    $.each(prestamos, function (index, prestamo) {
+        if(prestamo.usuario_id == usr_id){
+            if (prestamo.estado == 1)prestamos_activos++;
+            if (prestamo.estado == 2)prestamos_mora++;
+        }
+    });
+    $('#td_prestamos_mora').html(prestamos_mora);
+    $('#td_prestados_actualmente').html(prestamos_activos);
+}
+
 function SetearDatosUsuario() {
     $('#txt_nombres').val(usuarios[usr_index].nombres);
     $('#txt_apellidos').val(usuarios[usr_index].apellidos);
@@ -131,5 +147,6 @@ $(function() {
     VerDepartamentos();
     VerMunicipios();
     SetearDatosUsuario();
+    MostrarEstadoPrestamos();
     SetearDepartamentoMunicipio();
 });

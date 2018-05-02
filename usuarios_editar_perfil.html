@@ -90,6 +90,16 @@
                     </div>
                     <input type="button" id="btn_guardar" value="Guardar">
                 </div>
+                <table id="table_resumen_prestamos" class="tabla mostrar_info">
+                    <tr>
+                        <th>Prestados actualmente</th>
+                        <th>Prestamos en mora</th>
+                    </tr>
+                    <tr>
+                        <td id="td_prestados_actualmente" style="color:blue;"></td>
+                        <td id="td_prestamos_mora" style="color:red;"></td>
+                    </tr>
+                </table>
             </div>
         </div>
     </div>
@@ -97,6 +107,7 @@
     <script src="municipios.js"></script>
     <script src="script_users_perfil.js"></script>
     <script src="script_users_navegacion_botones.js"></script>
+    <script src="actualizar_estado_prestamos.js"></script>
 </body>
 
 </html>
