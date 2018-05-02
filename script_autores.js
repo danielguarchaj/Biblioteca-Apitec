@@ -600,4 +600,8 @@ $(function() {
         window.location.href = 'temas.html';
     });
 
+    $('#btn_buscar_autor').click(function() {
+        BuscarAutor($('#txt_buscar_autor').val());
+    });
+
 });

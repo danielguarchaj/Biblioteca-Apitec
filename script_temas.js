@@ -75,27 +75,71 @@ function AgregarNuevoTema(_tema) {
     recibidos
     Se insertan los elementos al html
 */
-function VerTemas(_inicio, _fin) {
+function VerTemas(_inicio, _fin, _filtro) {
     var temas_html = `<thead><tr>
                             <th class="ordenable">#</th>
                             <th class="ordenable">Tema</th>
                             <th class="ordenable">Fecha de ingreso</th>
                             <th>Operaciones</th>
                         </tr></thead><tbody>`;
-    $.each(Temas, function(index, tema) {
-        if ((index >= _inicio) && (index < _fin)) {
-            temas_html += '<tr>';
-            temas_html += '<td class="tema_seleccionado">' + tema.tema_id + '</td>';
-            temas_html += '<td>' + tema.tema + '</td>';
-            temas_html += '<td>' + tema.fecha_ingreso + '</td>';
-            temas_html += '<td> <input type="button" class="button tabla_button" value="Editar" onclick="ObtenerIdEditarTemaTabla(this)"> - ' +
-                '<input type="button" class="button tabla_button" value="Eliminar" onclick="EliminarTemaTabla(this)"> </td>';
-            temas_html += '</td>';
-        } else return;
-    });
-    temas_html += '</tbody>';
-    $('#table_temas').html(temas_html);
-    Temas.length < saltos_tabla ? $('#lbl_rango_temas').html(`Del ${inicio_actual+1} al ${Temas.length} de ${Temas.length}`) : $('#lbl_rango_temas').html(`Del ${inicio_actual+1} al ${fin_actual} de ${Temas.length}`);
+    if (_filtro == undefined) {
+        $.each(Temas, function(index, tema) {
+            if ((index >= _inicio) && (index < _fin)) {
+                temas_html += '<tr>';
+                temas_html += '<td class="tema_seleccionado">' + tema.tema_id + '</td>';
+                temas_html += '<td>' + tema.tema + '</td>';
+                temas_html += '<td>' + tema.fecha_ingreso + '</td>';
+                temas_html += '<td> <input type="button" class="button tabla_button" value="Editar" onclick="ObtenerIdEditarTemaTabla(this)"> - ' +
+                    '<input type="button" class="button tabla_button" value="Eliminar" onclick="EliminarTemaTabla(this)"> </td>';
+                temas_html += '</td>';
+            } else return;
+        });
+        temas_html += '</tbody>';
+        $('#table_temas').html(temas_html);
+        Temas.length < saltos_tabla ? $('#lbl_rango_temas').html(`Del ${inicio_actual+1} al ${Temas.length} de ${Temas.length}`) : $('#lbl_rango_temas').html(`Del ${inicio_actual+1} al ${fin_actual} de ${Temas.length}`);
+    }else {
+        $.each(_filtro, function(index, tema) {
+            if ((index >= _inicio) && (index < _fin)) {
+                temas_html += '<tr>';
+                temas_html += '<td class="tema_seleccionado">' + tema.tema_id + '</td>';
+                temas_html += '<td>' + tema.tema + '</td>';
+                temas_html += '<td>' + tema.fecha_ingreso + '</td>';
+                temas_html += '<td> <input type="button" class="button tabla_button" value="Editar" onclick="ObtenerIdEditarTemaTabla(this)"> - ' +
+                    '<input type="button" class="button tabla_button" value="Eliminar" onclick="EliminarTemaTabla(this)"> </td>';
+                temas_html += '</td>';
+            } else return;
+        });
+        temas_html += '</tbody>';
+        $('#table_temas').html(temas_html);
+        _filtro.length < saltos_tabla ? $('#lbl_rango_temas').html(`Del ${inicio_actual+1} al ${_filtro.length} de ${_filtro.length}`) : $('#lbl_rango_temas').html(`Del ${inicio_actual+1} al ${fin_actual} de ${_filtro.length}`);
+    }
+}
+
+/*
+    Funcion BuscarTema que recibe como parametro el texto que se esta buscando
+    La funcion se llama en el envento on change del input txt_buscar_tema
+    De esta forma se buscan coincidencias por cada vez que la cadena vaya cambiando
+    Para la busqueda se usa la funcion indexOf
+*/
+function BuscarTema(_busqueda) {
+    var criterio_busqueda = parseInt($('#slc_buscar_tema_por').val());
+    var filtro = [];
+    switch (criterio_busqueda) {
+        case 1:
+        $.each(Temas, function(indice, tema) {
+                if (tema.tema.indexOf(_busqueda) >= 0) filtro.push(tema);
+            })
+            VerTemas(inicio_actual, fin_actual, filtro);
+            break;
+        case 2:
+            $.each(Temas, function(indice, tema) {
+                if (tema.fecha_ingreso.indexOf(_busqueda) >= 0) filtro.push(tema);
+            })
+            VerTemas(inicio_actual, fin_actual, filtro);
+            break;
+        default:
+            break;
+    }
 }
 
 /*
@@ -335,5 +379,13 @@ $(function() {
     $('.btn_autores').click(function() {
         window.location.href = 'autores.html';
     });
+
+    $('#txt_buscar_tema').on('keyup', function () {
+        BuscarTema(this.value);
+    })
+
+    $('#btn_buscar_tema').click(function () {
+        BuscarTema($('#txt_buscar_tema').val());
+    })
 
 });
