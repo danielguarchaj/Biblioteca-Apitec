@@ -114,7 +114,6 @@ function BuscarLibroAutor(_busqueda) {
     var autor_id = localStorage.index_ver_autor;
     if (autor_id == 'null')return;
     var array_libros_autor = [];
-    if (array_libros_autor == 'null') return;
     $.each(Libros, function (index, libro) {
         if(libro.autor_id == autor_id)array_libros_autor.push(libro);
     })
@@ -191,7 +190,7 @@ function VerAutores(_inicio, _fin, _filtro) {
                 autores_html += '<td>' + autor.apellidos + '</td>';
                 autores_html += '<td>' + ObtenerNacionalidadAutor(autor.nacionalidad) + '</td>';
                 autores_html += '<td>' + ObtenerCantidadLibrosAutor(autor.autor_id) + '</td>';
-                autores_html += '<td> <input type="button" class="button tabla_button" value="Ver" onclick="MostrarLibrosAutor(' + index + ')">  </td>';
+                autores_html += '<td> <input type="button" class="button tabla_button" value="Ver" onclick="MostrarLibrosAutor(' + autor.autor_id + ')">  </td>';
                 autores_html += '</td>';
             } else return;
         });
