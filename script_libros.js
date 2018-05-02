@@ -829,8 +829,8 @@ $(function() {
             fin_actual_prestamos += saltos_tabla_prestamos;
             VerLibrosPrestados(inicio_actual_prestamos, fin_actual_prestamos);
         }
-        if (inicio_actual_prestamos + saltos_tabla_prestamos > prestamos.length) {
-            $('#lbl_rango_libros').html(`Del ${inicio_actual+1} al ${prestamos.length} de ${prestamos.length}`);
+        if (fin_actual_prestamos > prestamos.length) {
+            $('#lbl_rango_libros_prestados').html(`Del ${inicio_actual_prestamos+1} al ${prestamos.length} de ${prestamos.length}`);
         }
     });
 

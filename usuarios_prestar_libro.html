@@ -6,14 +6,13 @@
     <title>Biblioteca</title>
     <link rel="stylesheet" href="css/index.css">
     <script src="jquery.min.js"></script>
+    <script src="jquery.tablesorter.js"></script>
 </head>
 
 <body>
     <script type="text/javascript">
         if (localStorage.getItem('sesion_user') != '1' || localStorage.getItem('user_logeado')==null) window.location.href = 'usuarios_login.html';
         if (localStorage.getItem('prestar_libro') == 'null') window.location.href = 'usuarios_libros.html';
-        //localStorage.setItem('editar_autor', null);
-        //localStorage.setItem('editar_tema', null);
     </script>
     <div class="div_contenedor_principal">
         <div class="div_encabezado">

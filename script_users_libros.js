@@ -84,7 +84,7 @@ function ObtenerInfoTema(_id) {
     recibidos
     Se insertan los elementos al html
 */
-function VerLibros(_inicio, _fin) {
+function VerLibros(_inicio, _fin, _filtro) {
     var Autores_retreived = JSON.parse(localStorage.getItem('autores'));
     var Temas_retreived = JSON.parse(localStorage.getItem('temas'));
     var libros_html = `<thead><tr>
@@ -96,27 +96,52 @@ function VerLibros(_inicio, _fin) {
                             <th class="ordenable">Disp</th>
                             <th>Operaciones</th>
                         </tr></thead><tbody>`;
-    $.each(Libros, function(index, libro) {
-        var boton = '<input type="button" class="button tabla_button" value="Prestar" onclick="ObtenerIdPrestarLibro(this)">';
-        if (libro.disponibles == 0) boton = 'No Disponible';
-        var nombre_autor = ObtenerInfoAutor(libro.autor_id);
-        var nombre_tema = ObtenerInfoTema(libro.tema_id);
-        if ((index >= _inicio) && (index < _fin)) {
-            libros_html += '<tr>';
-            libros_html += '<td class="libro_seleccionado">' + libro.libro_id + '</td>';
-            libros_html += '<td>' + libro.titulo + '</td>';
-            libros_html += '<td>' + nombre_autor.nombres + '</td>';
-            libros_html += '<td>' + nombre_tema.tema + '</td>';
-            libros_html += '<td>' + libro.ubicacion + '</td>';
-            libros_html += '<td>' + libro.disponibles + '</td>';
-            libros_html += '<td> ' + boton + '</td>';
-            libros_html += '</tr>';
-        } else return;
-    });
-    libros_html += '</tbody>';
-    $('#table_libros').html(libros_html);
-    Libros.length < saltos_tabla ? $('#lbl_rango_libros').html(`Del ${inicio_actual+1} al ${Libros.length} de ${Libros.length}`) : $('#lbl_rango_libros').html(`Del ${inicio_actual+1} al ${fin_actual} de ${Libros.length}`);
-    if (Libros.length == 0) $('#lbl_rango_libros').html('Del 0 al 0 de 0');
+    if (_filtro == undefined) {
+        $.each(Libros, function(index, libro) {
+            var boton = '<input type="button" class="button tabla_button" value="Prestar" onclick="ObtenerIdPrestarLibro(this)">';
+            if (libro.disponibles == 0) boton = 'No Disponible';
+            var nombre_autor = ObtenerInfoAutor(libro.autor_id);
+            var nombre_tema = ObtenerInfoTema(libro.tema_id);
+            if ((index >= _inicio) && (index < _fin)) {
+                libros_html += '<tr>';
+                libros_html += '<td class="libro_seleccionado">' + libro.libro_id + '</td>';
+                libros_html += '<td>' + libro.titulo + '</td>';
+                libros_html += '<td>' + nombre_autor.nombres + '</td>';
+                libros_html += '<td>' + nombre_tema.tema + '</td>';
+                libros_html += '<td>' + libro.ubicacion + '</td>';
+                libros_html += '<td>' + libro.disponibles + '</td>';
+                libros_html += '<td> ' + boton + '</td>';
+                libros_html += '</tr>';
+            } else return;
+        });
+        libros_html += '</tbody>';
+        $('#table_libros').html(libros_html);
+        Libros.length < saltos_tabla ? $('#lbl_rango_libros').html(`Del ${inicio_actual+1} al ${Libros.length} de ${Libros.length}`) : $('#lbl_rango_libros').html(`Del ${inicio_actual+1} al ${fin_actual} de ${Libros.length}`);
+        if (Libros.length == 0) $('#lbl_rango_libros').html('Del 0 al 0 de 0');
+    }else {
+        $.each(_filtro, function(index, libro) {
+            var boton = '<input type="button" class="button tabla_button" value="Prestar" onclick="ObtenerIdPrestarLibro(this)">';
+            if (libro.disponibles == 0) boton = 'No Disponible';
+            var nombre_autor = ObtenerInfoAutor(libro.autor_id);
+            var nombre_tema = ObtenerInfoTema(libro.tema_id);
+            if ((index >= _inicio) && (index < _fin)) {
+                libros_html += '<tr>';
+                libros_html += '<td class="libro_seleccionado">' + libro.libro_id + '</td>';
+                libros_html += '<td>' + libro.titulo + '</td>';
+                libros_html += '<td>' + nombre_autor.nombres + '</td>';
+                libros_html += '<td>' + nombre_tema.tema + '</td>';
+                libros_html += '<td>' + libro.ubicacion + '</td>';
+                libros_html += '<td>' + libro.disponibles + '</td>';
+                libros_html += '<td> ' + boton + '</td>';
+                libros_html += '</tr>';
+            } else return;
+        });
+        libros_html += '</tbody>';
+        $('#table_libros').html(libros_html);
+        _filtro.length < saltos_tabla ? $('#lbl_rango_libros').html(`Del ${inicio_actual+1} al ${_filtro.length} de ${_filtro.length}`) : $('#lbl_rango_libros').html(`Del ${inicio_actual+1} al ${fin_actual} de ${_filtro.length}`);
+        if (_filtro.length == 0) $('#lbl_rango_libros').html('Del 0 al 0 de 0');
+    }
+
 }
 
 /*
