@@ -24,7 +24,7 @@ function VerLibrosTema(_inicio, _fin, _filtro) {
     if (Libros == 'null') return;
     var tema_id = localStorage.id_ver_tema;
     if (tema_id == 'null') return;
-    var tema_datos = ObtenerInfoAutor(tema_id);
+    var tema_datos = ObtenerInfoTema(tema_id);
     $('#h3_titulo_pantalla').html('Libros de categoria: ' + tema_datos.tema);
     var libro_temas = ObtenerCantidadLibrosTema(tema_id);
     var array_libros_temas = [];

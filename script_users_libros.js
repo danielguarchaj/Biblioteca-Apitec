@@ -361,7 +361,6 @@ function VerificarPrestamo() {
     var usuarios = JSON.parse(localStorage.usuarios);
     if (usuarios[usuario_index].estado != '1') mensaje += '\n- Usuario moroso';
     var cantidad_prestamos = CantidadPrestamosUsuario(usuarios[usuario_index].id);
-    console.log(cantidad_prestamos);
     if (cantidad_prestamos>=10) mensaje += '\n- Ya tiene ' + cantidad_prestamos + ' libros prestados, el maximo permitido es 10';
     if (usuarios[usuario_index].estado != 1) mensaje += '\n- Usuario moroso, solvente su deuda para poder prestar mas libros';
     if (mensaje == ''){

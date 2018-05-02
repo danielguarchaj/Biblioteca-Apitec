@@ -164,6 +164,8 @@ function VerHistorialPrestamos(_inicio, _fin, _filtro) {
                 }
             }else return false;
         });
+        console.log(_filtro.length);
+        console.log(_filtro);
         $('#table_historial').html(libros_devueltos_html);
         _filtro.length < saltos_tabla_historial ? $('#lbl_rango_libros_historial').html(`Del ${inicio_actual_historial+1} al ${_filtro.length} de ${_filtro.length}`) : $('#lbl_rango_libros_historial').html(`Del ${inicio_actual_historial+1} al ${fin_actual_historial} de ${_filtro.length}`);
         if (_filtro.length == 0) $('#lbl_rango_libros_historial').html('Del 0 al 0 de 0');
@@ -178,11 +180,17 @@ function BuscarPrestamoHistorial(_busqueda) {
     else return;
     var criterio_busqueda = parseInt($('#slc_buscar_prestamo_hist_por').val());
     var usuarios;
+    if (localStorage.usuarios != null) usuarios = JSON.parse(localStorage.usuarios);
+    else return;
+    var usuario_log;
+    if (localStorage.user_logeado != null) usuario_log = localStorage.user_logeado;
+    else return;
+
     var filtro = [];
     switch (criterio_busqueda) {
         case 1://Buscar por titulo del libro
             $.each(prestamos, function(indice, prestamo) {
-                if (prestamo.estado > 2) {
+                if (prestamo.estado > 2 && usuarios[usuario_log].id == prestamo.usuario_id) {
                     var libro_info = ObtenerDatosLibro(prestamo.libro_id);
                     if (libro_info.titulo.indexOf(_busqueda) >= 0) filtro.push(prestamo);
                 }
@@ -190,7 +198,7 @@ function BuscarPrestamoHistorial(_busqueda) {
             break;
         case 2://Buscar por autor del libro
             $.each(prestamos, function(indice, prestamo) {
-                if (prestamo.estado > 2) {
+                if (prestamo.estado > 2 && usuarios[usuario_log].id == prestamo.usuario_id) {
                     var libro_info = ObtenerDatosLibro(prestamo.libro_id);
                     var autor_datos = ObtenerInfoAutor(libro_info.autor_id);
                     var autor_nombres = autor_datos.nombres + ' ' + autor_datos.apellidos;
@@ -200,7 +208,7 @@ function BuscarPrestamoHistorial(_busqueda) {
             break;
         case 3://Buscar por tema
             $.each(prestamos, function(indice, prestamo) {
-                if (prestamo.estado > 2) {
+                if (prestamo.estado > 2 && usuarios[usuario_log].id == prestamo.usuario_id) {
                     var libro_info = ObtenerDatosLibro(prestamo.libro_id);
                     var tema_datos = ObtenerInfoTema(libro_info.tema_id);
                     if (tema_datos.tema.indexOf(_busqueda) >= 0) filtro.push(prestamo);
@@ -209,7 +217,7 @@ function BuscarPrestamoHistorial(_busqueda) {
             break;
         case 4://Buscar por codigo
             $.each(prestamos, function(indice, prestamo) {
-                if (prestamo.estado > 2) {
+                if (prestamo.estado > 2 && usuarios[usuario_log].id == prestamo.usuario_id) {
                     if (prestamo.token.indexOf(_busqueda) >= 0) filtro.push(prestamo);
                 }
             })
