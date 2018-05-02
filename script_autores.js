@@ -101,7 +101,7 @@ function ObtenerNacionalidadAutor(_id, _array) {
     recibidos
     Se insertan los elementos al html
 */
-function VerAutores(_inicio, _fin) {
+function VerAutores(_inicio, _fin, _filtro) {
     var Paises_retreived = JSON.parse(localStorage.getItem('paises'));
     var autores_html = `<thead><tr>
                             <th class="ordenable">#</th>
@@ -111,25 +111,85 @@ function VerAutores(_inicio, _fin) {
                             <th class="ordenable">Fecha de ingreso</th>
                             <th>Operaciones</th>
                         </tr></thead><tbody>`;
-    $.each(Autores, function(index, autor) {
-        if ((index >= _inicio) && (index < _fin)) {
-            autores_html += '<tr>';
-            autores_html += '<td class="autor_seleccionado">' + autor.autor_id + '</td>';
-            autores_html += '<td>' + autor.nombres + '</td>';
-            autores_html += '<td>' + autor.apellidos + '</td>';
-            autores_html += '<td>' + ObtenerNacionalidadAutor(autor.nacionalidad, Paises_retreived) + '</td>';
-            autores_html += '<td>' + autor.fecha_ingreso + '</td>';
-            autores_html += '<td> <input type="button" class="button tabla_button" value="Editar" onclick="ObtenerIdEditarAutorTabla(this)"> - ' +
-                '<input type="button" class="button tabla_button" value="Eliminar" onclick="EliminarAutorTabla(this)"> </td>';
-            autores_html += '</td>';
-        } else return;
-    });
-    autores_html += '</tbody>';
-    $('#table_autores').html(autores_html);
-    if (Autores.length < saltos_tabla) {
-        $('#lbl_rango_autores').html(`Del ${inicio_actual+1} al ${Autores.length} de ${Autores.length}`);
-    } else {
-        $('#lbl_rango_autores').html(`Del ${inicio_actual+1} al ${fin_actual} de ${Autores.length}`);
+    if (_filtro == undefined) {
+        $.each(Autores, function(index, autor) {
+            if ((index >= _inicio) && (index < _fin)) {
+                autores_html += '<tr>';
+                autores_html += '<td class="autor_seleccionado">' + autor.autor_id + '</td>';
+                autores_html += '<td>' + autor.nombres + '</td>';
+                autores_html += '<td>' + autor.apellidos + '</td>';
+                autores_html += '<td>' + ObtenerNacionalidadAutor(autor.nacionalidad, Paises_retreived) + '</td>';
+                autores_html += '<td>' + autor.fecha_ingreso + '</td>';
+                autores_html += '<td> <input type="button" class="button tabla_button" value="Editar" onclick="ObtenerIdEditarAutorTabla(this)"> - ' +
+                    '<input type="button" class="button tabla_button" value="Eliminar" onclick="EliminarAutorTabla(this)"> </td>';
+                autores_html += '</td>';
+            } else return;
+        });
+        autores_html += '</tbody>';
+        $('#table_autores').html(autores_html);
+        if (Autores.length < saltos_tabla) {
+            $('#lbl_rango_autores').html(`Del ${inicio_actual+1} al ${Autores.length} de ${Autores.length}`);
+        } else {
+            $('#lbl_rango_autores').html(`Del ${inicio_actual+1} al ${fin_actual} de ${Autores.length}`);
+        }
+    }else {
+        $.each(_filtro, function(index, autor) {
+            if ((index >= _inicio) && (index < _fin)) {
+                autores_html += '<tr>';
+                autores_html += '<td class="autor_seleccionado">' + autor.autor_id + '</td>';
+                autores_html += '<td>' + autor.nombres + '</td>';
+                autores_html += '<td>' + autor.apellidos + '</td>';
+                autores_html += '<td>' + ObtenerNacionalidadAutor(autor.nacionalidad, Paises_retreived) + '</td>';
+                autores_html += '<td>' + autor.fecha_ingreso + '</td>';
+                autores_html += '<td> <input type="button" class="button tabla_button" value="Editar" onclick="ObtenerIdEditarAutorTabla(this)"> - ' +
+                    '<input type="button" class="button tabla_button" value="Eliminar" onclick="EliminarAutorTabla(this)"> </td>';
+                autores_html += '</td>';
+            } else return;
+        });
+        autores_html += '</tbody>';
+        $('#table_autores').html(autores_html);
+        if (_filtro.length < saltos_tabla) {
+            $('#lbl_rango_autores').html(`Del ${inicio_actual+1} al ${_filtro.length} de ${_filtro.length}`);
+        } else {
+            $('#lbl_rango_autores').html(`Del ${inicio_actual+1} al ${fin_actual} de ${_filtro.length}`);
+        }
+    }
+}
+
+/*
+    Funcion BuscarAutor que recibe como parametro el texto que se esta buscando
+    La funcion se llama en el envento on change del input txt_buscar_autor
+    De esta forma se buscan coincidencias por cada vez que la cadena vaya cambiando
+    Para la busqueda se usa la funcion indexOf
+*/
+function BuscarAutor(_busqueda) {
+    var paises;
+    if (localStorage.paises!=null)paises= JSON.parse(localStorage.paises);
+    else return;
+    var criterio_busqueda = parseInt($('#slc_buscar_autor_por').val());
+    var filtro = [];
+    switch (criterio_busqueda) {
+        case 1:
+        $.each(Autores, function(indice, autor) {
+                if (autor.nombres.indexOf(_busqueda) >= 0) filtro.push(autor);
+            })
+            VerAutores(inicio_actual, fin_actual, filtro);
+            break;
+        case 2:
+            $.each(Autores, function(indice, autor) {
+                if (autor.apellidos.indexOf(_busqueda) >= 0) filtro.push(autor);
+            })
+            VerAutores(inicio_actual, fin_actual, filtro);
+            break;
+        case 3:
+            $.each(Autores, function(indice, autor) {
+                var nacionalidad = ObtenerNacionalidadAutor(autor.nacionalidad, paises);
+                if (nacionalidad.indexOf(_busqueda) >= 0) filtro.push(autor);
+            })
+            VerAutores(inicio_actual, fin_actual, filtro);
+            break;
+        default:
+            break;
     }
 }
 
@@ -507,6 +567,10 @@ $(function() {
             $('#lbl_rango_autores').html(`Del ${inicio_actual+1} al ${Autores.length} de ${Autores.length}`);
         }
     });
+
+    $('#txt_buscar_autor').on('keyup', function () {
+        BuscarAutor(this.value);
+    })
 
     $('#btn_regresar_agregar_autor').click(function() { //////////
         window.location.href = 'autores.html';
